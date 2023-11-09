@@ -1,0 +1,12 @@
+name: phylo
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+    - dendropy
+    - numpy
+    - typer
+    - scipy
+    - matplotlib

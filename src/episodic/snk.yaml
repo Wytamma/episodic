@@ -1,0 +1,125 @@
+logo: Episodic
+tagline: A pipeline for fitting and testing Fixed Local Clock (FLC) molecular clock models for episodic evolution.
+annotations:
+  alignment:
+    type: Path
+    help: "Path to a fasta file containing the alignment."
+    required: true
+  group:
+    type: List[str]
+    help: "Group sequences containing this value (in the header) to define a FLC. Can specify multiple."
+    required: true
+  date_delimiter:
+    type: str
+    help: "Delimiter to use to split the date from the rest of the header."
+    required: false
+    default: '"|"'
+  date_index:
+    type: int
+    help: "Index of the date in the header. 0-based."
+    required: false
+    default: -1
+  newick:
+    type: Path
+    help: "Path to a newick tree file. If provided topology will be fixed."
+    required: false
+  clock:
+    type: List[str]
+    help: "Clock models to test. Options are 'strict', 'relaxed', and 'flc-stem'. Can specify multiple."
+    required: false
+    default: ['strict', 'relaxed', 'flc-stem']
+  chain_length:
+    type: int
+    help: "Length of the chain."
+    required: false
+    default: 10000000
+  samples:
+    type: int
+    help: "Number of samples to draw from the chain."
+    required: false
+    default: 10000
+  rate_gamma_prior_shape:
+    type: float
+    help: "Shape parameter for the gamma prior on the rate."
+    required: false
+    default: 0.5
+  rate_gamma_prior_scale:
+    type: float
+    help: "Scale parameter for the gamma prior on the rate."
+    required: false
+    default: 0.1
+  outdir:
+    type: Path
+    help: "Path to the output directory."
+    required: false
+    default: results
+  dated:
+    type: bool
+    help: Create a timestamped output subdirectory
+    required: false
+    default: false
+  duplicates:
+    type: int
+    help: "Number of duplicate runs. To test for convergence."
+    required: false
+    default: 2
+  trees:
+    type: bool
+    help: "If false, the trees will not be saved."
+    required: false
+    default: true
+  mcc_tree:
+    heights:
+      type: List[str]
+      help: "Height to use for the MCC tree. Can specify multiple. 'mean' (default), 'median', 'keep' or 'ca'"
+      required: false
+      default: ['mean']
+  marginal_likelihood:
+    estimate:
+      type: bool
+      help: "If true, the PS/SS will be used to estimate the marginal likelihood."
+      required: false
+      default: True
+    paths:
+      type: int
+      help: "Number of paths to use for the marginal likelihood estimation."
+      required: false
+      default: 100
+    chain_length:
+      type: int
+      help: "Length of the chain for the marginal likelihood estimation."
+      required: false
+      default: 1000000
+    duplicates:
+      type: int
+      help: "Number of duplicate MLE runs."
+      required: false
+      default: 3
+  fit_clocks:
+    type: bool
+    help: "If true, BEAST will be used to fit the clocks. Use --no-fit-clocks to only run the MLE analysis."
+    required: false
+    default: true
+  beast:
+    threads:
+      type: int
+      help: "Number of threads to use for BEAST."
+      required: false
+      default: 4
+    resources:
+      runtime: 
+        help: "Runtime in minutes."
+        default: 10080 # 7 days
+      mem_mb: 
+        help: "Memory to request."
+        default: 400M
+      partition: 
+        help: "Partition to submit to."
+        default: gpu-a100
+      gres: 
+        help: "GPU resource to request."
+        default: gpu:1
+    envmodules:
+      default:
+        - "GCC/11.3.0"
+        - "beagle-lib/3.1.2-CUDA-11.7.0"

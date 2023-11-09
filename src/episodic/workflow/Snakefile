@@ -1,0 +1,111 @@
+from utils import decimal_year_to_date
+from scripts.populate_beast_template import taxa_from_fasta
+
+
+SNAKE_DIR = Path(workflow.basedir)
+TEMPLATE_DIR = SNAKE_DIR / "templates"
+SCRIPT_DIR = SNAKE_DIR / "scripts"
+
+OUT_DIR=Path(config["outdir"])
+if config["dated"]:
+    # create timestamped output directory
+    from datetime import datetime
+    OUT_DIR = OUT_DIR / datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+CLOCK_DIR = OUT_DIR / "clocks"
+
+MLE: bool = config["marginal_likelihood"].get("estimate")
+fit_clocks: bool = config["fit_clocks"]
+rate_gamma_prior_scale=config["rate_gamma_prior_scale"]
+rate_gamma_prior_shape=config["rate_gamma_prior_shape"]
+clocks = expand("{clock}_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}", clock=config["clock"], rate_gamma_prior_shape=rate_gamma_prior_shape, rate_gamma_prior_scale=rate_gamma_prior_scale)
+flc_clocks = [c for c in clocks if "flc" in c]
+relaxed_clocks = [c for c in clocks if "relaxed" in c]
+alignment_path=config["alignment"]
+date_delimiter=config["date_delimiter"]
+date_index=config["date_index"]
+
+duplicates = range(1, config["duplicates"] + 1) if fit_clocks else []
+mle_duplicates = range(1, config["marginal_likelihood"].get("duplicates") + 1) if MLE else []
+
+ALL_LOG_FILES = expand(CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.log", clock=clocks, duplicate=duplicates)
+PER_CLOCK_LOG_FILES = lambda wildcards: [CLOCK_DIR / wildcards.clock / f"{wildcards.clock}_{duplicate}" / f"{wildcards.clock}_{duplicate}.log" for duplicate in duplicates]
+
+TAXA = taxa_from_fasta(
+    alignment_path,
+    date_delimiter=date_delimiter,
+    date_index=date_index,
+)
+
+most_recent_sampling_date = decimal_year_to_date(min(TAXA, key=lambda taxa: taxa.date).date)
+
+print(f"Running Episodic with {len(TAXA)} taxa")
+print(f"Most recent sampling date: {most_recent_sampling_date}")
+
+include: "rules/beast.smk"
+include: "rules/config.smk"
+include: "rules/report.smk"
+include: "rules/tree.smk"
+
+
+
+
+CLOCK_FILES = []
+
+CLOCK_FILES.extend(
+    [
+        expand(CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}_trace_plots", clock=clocks, duplicate=duplicates),
+        expand(CLOCK_DIR / "{clock}" / "{clock}-summary.csv", clock=clocks),
+    ]
+)
+CLOCK_FILES.extend(
+    [CLOCK_DIR / f"{clock}" / f"{clock}-violin.svg" for clock in flc_clocks],
+)
+CLOCK_FILES.extend(
+    [CLOCK_DIR / f"{clock}" / f"{clock}-odds.csv" for clock in flc_clocks],
+)
+CLOCK_FILES.extend(
+    expand(
+        CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-{type}.svg", 
+        type=["trace", "violin"],
+        rate_gamma_prior_shape=rate_gamma_prior_shape,
+        rate_gamma_prior_scale=rate_gamma_prior_scale
+    ),
+)
+if config.get("trees"):
+    CLOCK_FILES.extend(
+        expand(
+            CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.mcc.{heights}.{ext}",
+            clock=clocks,
+            duplicate=duplicates,
+            heights=config["mcc_tree"].get("heights", "mean"),
+            ext=["nwk", "svg"]
+        ),
+    )
+    CLOCK_FILES.extend(
+        expand(
+            CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.rate_quantiles.{ext}", 
+            clock=clocks, 
+            duplicate=duplicates, 
+            ext=["csv", "svg"]
+        )
+    )
+
+
+
+OUTPUT_FILES = [
+    OUT_DIR / "config.yaml",
+]
+
+if fit_clocks:
+    OUTPUT_FILES.extend(
+        CLOCK_FILES
+    )
+
+if MLE:
+    OUTPUT_FILES.append(
+        OUT_DIR / "mle" / "mle.svg"
+    )
+
+rule all:
+    input: 
+        *OUTPUT_FILES

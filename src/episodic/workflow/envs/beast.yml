@@ -1,0 +1,6 @@
+channels:
+  - bioconda
+  - conda-forge
+dependencies:
+  - beast==1.10.4
+  - beagle-lib<4
