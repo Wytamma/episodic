@@ -2,3 +2,4 @@ src/episodic/.conda
 .snakemake
 results
 __pycache__
+dist
