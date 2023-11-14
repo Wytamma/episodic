@@ -90,6 +90,11 @@ annotations:
       help: "Length of the chain for the marginal likelihood estimation."
       required: false
       default: 1000000
+    log_every:
+      type: int
+      help: "Log MLE every N steps."
+      required: false
+      default: 10000
     duplicates:
       type: int
       help: "Number of duplicate MLE runs."

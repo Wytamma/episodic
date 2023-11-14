@@ -17,6 +17,7 @@ rule create_beast_xml:
         mle = lambda wildcards: "--mle" if "mle" in wildcards.name else "",
         mle_chain_length = f"--mle-chain-length {config['marginal_likelihood'].get('chain_length')}",
         mle_path_steps = f"--mle-path-steps {config['marginal_likelihood'].get('paths')}",
+        mle_log_every = f"--mle-log-every {config['marginal_likelihood'].get('log_every')}",
         no_trace = lambda wildcards: "--no-trace" if "mle" in wildcards.name else "",
         no_trees = lambda wildcards: "--no-trees" if not config.get("trees") or "mle" in wildcards.name else "",
         fixed_tree = f'--fixed-tree {config.get("fixed_tree")}'  if config.get("fixed_tree") else "",
@@ -37,6 +38,7 @@ rule create_beast_xml:
             {params.mle} \
             {params.mle_chain_length} \
             {params.mle_path_steps} \
+            {params.mle_log_every} \
             {params.no_trace} \
             {params.no_trees} \
             {params.fixed_tree}

@@ -57,6 +57,7 @@ def populate_beast_template(
         samples: int = 10000,
         mle_chain_length: int = 1000000,
         mle_path_steps: int = 100,
+        mle_log_every: int = 10000,
         date_delimiter="|",
         date_index=-1,
         fixed_tree: Optional[Path] = None,
@@ -93,7 +94,7 @@ def populate_beast_template(
     mle_log = None
     if mle:
         mle_log = MLE(
-            log_every = max(1, mle_chain_length // samples),
+            log_every = mle_log_every,
             file_name=f"{name}.mle.log",
             results_file_name=work_dir / f"{name}.mle.results.log",
             chain_length=mle_chain_length,
@@ -137,6 +138,7 @@ if __name__ == "__main__":
     parser.add_argument("--mle", action="store_true", help="Whether to run the marginal likelihood estimator.")
     parser.add_argument("--mle-chain-length", type=int, default=1000000, help="Length of the MCMC chain for the marginal likelihood estimator.")
     parser.add_argument("--mle-path-steps", type=int, default=100, help="Number of path steps for the marginal likelihood estimator.")
+    parser.add_argument("--mle-log-every", type=int, default=10000, help="Log every for the marginal likelihood estimator.")
     parser.add_argument("--fixed-tree", type=Path, help="Path to the fixed tree file.")
     parser.add_argument("--output", type=Path, required=True, help="Path to the output Beast XML file.")
 
@@ -163,6 +165,7 @@ if __name__ == "__main__":
         mle=args.mle,
         mle_chain_length=args.mle_chain_length,
         mle_path_steps=args.mle_path_steps,
+        mle_log_every=args.mle_log_every,
     )
     # save to file
     args.output.write_text(beast_xml)
