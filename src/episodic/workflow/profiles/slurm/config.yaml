@@ -17,7 +17,7 @@ default-resources:
   - account=''
   - partition=''
   - runtime=15
-  - mem_mb=4000
+  - mem_mb=1G
   - nodes=1
   - tasks_per_node=1
   - qos='covid19'
