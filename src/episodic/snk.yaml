@@ -118,7 +118,7 @@ annotations:
         default: 10080 # 7 days
       mem_mb: 
         help: "Memory to request."
-        default: 400M
+        default: "4G"
       partition: 
         help: "Partition to submit to."
         default: gpu-a100
