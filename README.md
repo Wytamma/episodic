@@ -38,12 +38,30 @@ Given a multiple sequence alignment and a list of groups to test for episodic ev
 pip install episodic
 ```
 
+## Outputs
+Episodic will produce a range on log files, trees and plots. The following is a list of the main outputs.
+
+- **BEAST log files** - `episodic` will produce a BEAST log file for each clock model. These files can be analysed with [Beastiary](https://beastiary.wytamma.com/).
+- **BEAST trees** - `episodic` will produce a BEAST tree file for each clock model.
+- **MCC trees** - `episodic` will produce a MCC tree for each clock model.
+- **MCC tree plots** - `episodic` will produce a MCC tree plot for each clock model.
+![](docs/images/mcc.mean.svg)
+- **Marginal likelihoods** - `episodic` will produce a marginal likelihood plot for each clock model.
+![](docs/images/mle.svg)
+- **Bayes factors on effect size** - `episodic` will produce a Bayes factor plot for each clock model. 
+    |Rate Column|p_p|p_odds|pos_p|pos_odds|bf|
+    |---|---|---|---|---|---|
+    |BA.2.86.rate|0.5034996111543162|1.0140971134481986|1.0|inf|inf|
+- **Rank and quantile tests** - `episodic` will produce a rank and quantile test plot for each clock model.
+![](docs/images/rate_quantiles.svg)
+
+- **Clock rate plots** - `episodic` will produce a rate plot for each clock model.
+![](docs/images/rate-rug.png)
+![](docs/images/rate-rug-2.png) 
+
 ## DAG
 
 ![](docs/images/dag.png)
-
-## Outputs
-![](docs/images/mcc.svg)
 
 ## License
 
