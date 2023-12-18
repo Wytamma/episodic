@@ -34,6 +34,13 @@ Source = "https://github.com/wytamma/episodic"
 [project.scripts]
 episodic = "episodic.cli:episodic"
 
+[tool.hatch.build]
+exclude = [
+  ".conda",
+  "/docs",
+  "/tests",
+]
+
 [tool.hatch.version]
 path = "src/episodic/__about__.py"
 

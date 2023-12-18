@@ -55,7 +55,7 @@ rule run_beast:
         **TREES,
     threads: config["beast"].get("threads")
     resources:
-        **config["beast"].get("resources", {}),
+        **beast_resources,
     envmodules:
         *config["beast"].get("envmodules", []),
     conda:

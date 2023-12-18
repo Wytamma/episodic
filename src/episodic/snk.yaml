@@ -111,8 +111,37 @@ annotations:
       type: int
       help: "Number of threads to use for BEAST."
       required: false
-      default: 4
-    resources:
+      default:
+  resources:
+    default:
+      account:
+        help: "Account to submit to."
+        default: ""
+      partition:
+        help: "Partition to submit to."
+        default: ""
+      runtime: 
+        help: "Runtime in minutes."
+        default: 120
+      mem_mb: 
+        help: "Memory to request."
+        default: "4G"
+      nodes:
+        help: "Number of nodes to request."
+        default: 1
+      tasks_per_node:
+        help: "Number of tasks per node to request."
+        default: 1
+      qos:
+        help: "QOS to submit to."
+        default: ""
+      gres:
+        help: "GPU resource to request."
+        default: ""
+      extra:
+        help: "Extra resources to request."
+        default: ""
+    beast:
       runtime: 
         help: "Runtime in minutes."
         default: 10080 # 7 days

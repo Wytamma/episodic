@@ -11,6 +11,8 @@ rule max_clade_credibility_tree:
         burnin = int(int(config['samples']) * 0.1),
     conda:
         "../envs/beast.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         treeannotator -burninTrees {params.burnin} -heights {wildcards.heights} {input} {output}
@@ -27,6 +29,8 @@ rule max_clade_credibility_tree_newick:
         CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.nwk",
     conda:
         "../envs/phylo.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         "${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/tree_converter.py {input} {output} --node-label posterior"
 
@@ -43,8 +47,10 @@ rule max_clade_credibility_tree_render:
         mrsd = most_recent_sampling_date,
     conda:
         "../envs/ggtree.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
-        "${{CONDA_PREFIX}}/bin/RScript {SCRIPT_DIR}/plotMCCtree.R --input {input} --output {output} --mrsd {params.mrsd}"
+        "${{CONDA_PREFIX}}/bin/Rscript {SCRIPT_DIR}/plotMCCtree.R --input {input} --output {output} --mrsd {params.mrsd}"
 
 
 rule rate_quantile_analysis:
@@ -57,6 +63,8 @@ rule rate_quantile_analysis:
         groups = " ".join(f"-g {group}" for group in config['group']),
     conda:
         "../envs/phylo.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         python {SCRIPT_DIR}/phylo_rate_quantile_analysis.py \

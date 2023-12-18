@@ -23,7 +23,7 @@ default-resources:
   - qos='covid19'
   - gres=''
   - extra=''
-cluster-cancel: "scancel {jobid}"
+cluster-cancel: slurm-cancel
 jobs: 50
 use-conda: true
 use-envmodules: true

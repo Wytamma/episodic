@@ -7,6 +7,8 @@ rule extract_mle:
         MLE_DIR / "mle.svg",
     conda:
         "../envs/python.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         python {SCRIPT_DIR}/extract_mle.py {MLE_DIR}
@@ -22,6 +24,8 @@ rule plot_traces:
         directory(CLOCK_DIR / "{clock}" / "{name}" / "{name}_trace_plots/"),
     conda:
         "../envs/plot_traces.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/plot_traces.py {input} {output}
@@ -39,6 +43,8 @@ rule summary:
         output=lambda wildcards: CLOCK_DIR / f"{wildcards.clock}" / f"{wildcards.clock}-summary.csv",
     conda:
         "../envs/arviz.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/arviz_output.py summary {input} {params.output}
@@ -58,6 +64,8 @@ rule plot_flc_rates:
         gamma_scale=rate_gamma_prior_scale,
     conda:
         "../envs/arviz.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/arviz_output.py rates {input} --output-prefix {params.output_prefix} --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
@@ -85,6 +93,8 @@ rule calculate_odds:
         gamma_scale=rate_gamma_prior_scale,
     conda:
         "../envs/python.yml"
+    resources:
+        **config["resources"].get("default", {}),
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/calculate_odds.py {input} {output} --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
