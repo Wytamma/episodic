@@ -48,7 +48,7 @@ Episodic will produce a range on log files, trees and plots. The following is a 
 ![](docs/images/mcc.mean.svg)
 - **Marginal likelihoods** - `episodic` will produce a marginal likelihood plot for each clock model.
 ![](docs/images/mle.svg)
-- **Bayes factors on effect size** - `episodic` will calculate a Bayes factors on effect size for each clock model. 
+- **Bayes factors on effect size** - `episodic` will calculate a Bayes factors on effect size for each local clock model. 
     |Rate Column|p_p|p_odds|pos_p|pos_odds|bf|
     |---|---|---|---|---|---|
     |BA.2.86.rate|0.5034996111543162|1.0140971134481986|1.0|inf|inf|
