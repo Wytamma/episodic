@@ -158,10 +158,10 @@ def summary(
 
     xdata = xr.Dataset.from_dataframe(df)
     dataset = az.InferenceData(posterior=xdata)
-    summary = az.summary(dataset)
+    summary = az.summary(dataset, round_to=None)
 
     # save the summary to csv
-    summary.to_csv(output, round_to=None)
+    summary.to_csv(output)
 
 
 if __name__ == "__main__":
