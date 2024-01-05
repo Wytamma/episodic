@@ -158,7 +158,7 @@ def summary(
 
     xdata = xr.Dataset.from_dataframe(df)
     dataset = az.InferenceData(posterior=xdata)
-    summary = az.summary(dataset, round_to=None)
+    summary = az.summary(dataset, round_to=6)
 
     # save the summary to csv
     summary.to_csv(output)
