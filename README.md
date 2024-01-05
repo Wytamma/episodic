@@ -42,6 +42,7 @@ pip install episodic
 Episodic will produce a range on log files, trees and plots. The following is a list of the main outputs.
 
 - **BEAST log files** - `episodic` will produce a BEAST log file for each clock model. These files can be analysed with [Beastiary](https://beastiary.wytamma.com/).
+![](docs/images/beastiary.png)
 - **BEAST trees** - `episodic` will produce a BEAST tree file for each clock model.
 - **MCC trees** - `episodic` will produce a MCC tree for each clock model.
 - **MCC tree plots** - `episodic` will produce a MCC tree plot for each clock model.
