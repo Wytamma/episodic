@@ -161,7 +161,7 @@ def summary(
     summary = az.summary(dataset)
 
     # save the summary to csv
-    summary.to_csv(output)
+    summary.to_csv(output, round_to=None)
 
 
 if __name__ == "__main__":
