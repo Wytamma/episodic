@@ -42,7 +42,7 @@ rule max_clade_credibility_tree_render:
     input:
         rules.max_clade_credibility_tree.output,
     output:
-        CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.svg",
+        CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.rate.svg",
     params:
         mrsd = most_recent_sampling_date,
     conda:
