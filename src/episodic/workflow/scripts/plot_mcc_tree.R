@@ -11,15 +11,23 @@ library(optparse)
 option_list <- list(
   make_option(c("-i", "--input"),
     type = "character", default = NULL,
-    help = "Path to the BEAST MCC tree file", metavar = "file"
+    help = "Path to the BEAST MCC tree file",
+    metavar = "file"
   ),
-  make_option(c("-o", "--output"),
-    type = "character", default = "tree_plot.png",
-    help = "Output file for the tree plot (e.g., tree_plot.png)", metavar = "file"
+  make_option(c("-o", "--output-prefix"),
+    type = "character", default = "mcc.tree",
+    help = "Output file for the tree plot (e.g., tree_plot.png)",
+    metavar = "file"
   ),
   make_option(c("-m", "--mrsd"),
-    type = "character", default = NULL,
+    type = "character",
+    default = NULL,
     help = "Most recent sampling date (MRSD) for the tree", metavar = "date"
+  ),
+  make_option(c("-e", "--ext"),
+    type = "character",
+    default = "svg",
+    help = "Output file extension (e.g., png, pdf, svg)", metavar = "ext"
   )
 )
 
@@ -39,10 +47,10 @@ if (is.null(opt$input)) {
 beast <- read.beast(opt$input)
 
 # Extract the file name without the extension
-output_without_ext <- tools::file_path_sans_ext(opt$output)
+output_without_ext <- opt$`output-prefix`
 
 # Extract the file extension
-output_extension <- tools::file_ext(opt$output)
+output_extension <- opt$ext
 
 # Create the plot
 p <- ggtree(beast, aes(color = rate), size = 0.7, mrsd = opt$mrsd) +
