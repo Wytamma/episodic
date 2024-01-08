@@ -6,59 +6,41 @@ annotations:
     type: Path
     help: "Path to a fasta file containing the alignment."
     required: true
+    short: a
   group:
     type: List[str]
     help: "Group sequences containing this value (in the header) to define a FLC. Can specify multiple."
     required: true
-  date_delimiter:
-    type: str
-    help: "Delimiter to use to split the date from the rest of the header."
-    required: false
-    default: '"|"'
-  date_index:
-    type: int
-    help: "Index of the date in the header. 0-based."
-    required: false
-    default: -1
-  newick:
-    type: Path
-    help: "Path to a newick tree file. If provided topology will be fixed."
-    required: false
+    short: g
   clock:
     type: List[str]
     help: "Clock models to test. Options are 'strict', 'relaxed', and 'flc-stem'. Can specify multiple."
     required: false
     default: ['strict', 'relaxed', 'flc-stem']
-  chain_length:
-    type: int
-    help: "Length of the chain."
-    required: false
-    default: 10000000
-  samples:
-    type: int
-    help: "Number of samples to draw from the chain."
-    required: false
-    default: 10000
   rate_gamma_prior_shape:
     type: float
     help: "Shape parameter for the gamma prior on the rate."
     required: false
     default: 0.5
+    short: shape
   rate_gamma_prior_scale:
     type: float
     help: "Scale parameter for the gamma prior on the rate."
     required: false
     default: 0.1
-  outdir:
-    type: Path
-    help: "Path to the output directory."
+    short: scale
+  chain_length:
+    type: int
+    help: "Length of the chain."
     required: false
-    default: results
-  dated:
-    type: bool
-    help: Create a timestamped output subdirectory
+    default: 10000000
+    short: cl
+  samples:
+    type: int
+    help: "Number of samples to draw from the chain."
     required: false
-    default: false
+    default: 10000
+    short: s
   duplicates:
     type: int
     help: "Number of duplicate runs. To test for convergence."
@@ -75,12 +57,38 @@ annotations:
       help: "Height to use for the MCC tree. Can specify multiple. 'mean' (default), 'median', 'keep' or 'ca'"
       required: false
       default: ['mean']
+  date_delimiter:
+    type: str
+    help: "Delimiter to use to split the date from the rest of the header."
+    required: false
+    default: '"|"'
+  date_index:
+    type: int
+    help: "Index of the date in the header. 0-based."
+    required: false
+    default: -1
+  newick:
+    type: Path
+    help: "Path to a newick tree file. If provided topology will be fixed."
+    required: false
+  outdir:
+    type: Path
+    help: "Path to the output directory."
+    required: false
+    default: results
+    short: o
+  dated:
+    type: bool
+    help: Create a timestamped output subdirectory
+    required: false
+    default: false
   marginal_likelihood:
     estimate:
       type: bool
-      help: "If true, the PS/SS will be used to estimate the marginal likelihood."
+      help: "If -mle flag is passed the PS/SS will be used to estimate the marginal likelihood."
       required: false
-      default: True
+      default: false
+      short: mle
     paths:
       type: int
       help: "Number of paths to use for the marginal likelihood estimation."
