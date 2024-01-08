@@ -42,18 +42,18 @@ rule max_clade_credibility_tree_render:
     input:
         rules.max_clade_credibility_tree.output,
     output:
-        CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.rate.svg",
+        CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.svg",
         CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.height_0.95_HPD.svg",
         CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.posterior.svg"
     params:
         mrsd = most_recent_sampling_date,
-        prefix = lambda wildcards: CLOCK_DIR / "{wildcards.clock}" / "{wildcards.name}" / "{wildcards.name}.mcc.{wildcards.heights}",
+        prefix = lambda wildcards: f"{CLOCK_DIR}/{wildcards.clock}/{wildcards.name}/{wildcards.name}.mcc.{wildcards.heights}",
     conda:
         "../envs/ggtree.yml"
     resources:
         **config["resources"].get("default", {}),
     shell:
-        "${{CONDA_PREFIX}}/bin/Rscript {SCRIPT_DIR}/plotMCCtree.R --input {input} --output-prefix {params.prefix} --mrsd {params.mrsd}"
+        "${{CONDA_PREFIX}}/bin/Rscript {SCRIPT_DIR}/plot_mcc_tree.R --input {input} --output-prefix {params.prefix} --mrsd {params.mrsd}"
 
 
 rule rate_quantile_analysis:
