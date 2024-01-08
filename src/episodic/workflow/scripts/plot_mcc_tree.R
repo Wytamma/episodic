@@ -26,8 +26,8 @@ option_list <- list(
   ),
   make_option(c("-e", "--ext"),
     type = "character",
-    default = "svg",
-    help = "Output file extension (e.g., png, pdf, svg)", metavar = "ext"
+    default = ".svg",
+    help = "Output file extension (e.g., .png, .pdf, .svg)", metavar = "ext"
   )
 )
 
@@ -63,13 +63,13 @@ if (is.null(opt$mrsd)) {
   p <- revts(p) + scale_x_continuous(labels = abs)
 }
 
-ggsave(paste0(output_without_ext, ".rate.", output_extension), plot = p)
+ggsave(paste0(output_without_ext, output_extension), plot = p)
 
 p <- p +
   geom_range(range = "height_0.95_HPD", color = "#3498db", alpha = 0.6, size = 2)
 
 ggsave(
-  paste0(output_without_ext, ".height_0.95_HPD.", output_extension),
+  paste0(output_without_ext, ".height_0.95_HPD", output_extension),
   plot = p
 )
 
@@ -77,6 +77,6 @@ p <- p +
   geom_nodelab(aes(label = round(posterior, 2)), vjust = -.5, size = 3)
 
 ggsave(
-  paste0(output_without_ext, ".posterior.", output_extension),
+  paste0(output_without_ext, ".posterior", output_extension),
   plot = p
 )
