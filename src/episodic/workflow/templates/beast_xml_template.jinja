@@ -13,7 +13,7 @@
 	<taxa id="taxa">
 		{% for taxon in taxa %}
 		<taxon id="{{ taxon.id }}">
-			<date value="{{ taxon.date }}" direction="forwards" units="years"/>
+			<date value="{{ taxon.date }}" direction="forwards" units="years" uncertainty="{{ taxon.uncertainty }}"/>
 		</taxon>
 		{% endfor %}
 	</taxa >

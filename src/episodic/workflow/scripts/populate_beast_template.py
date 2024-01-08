@@ -12,6 +12,7 @@ class Taxon:
     id: str
     sequence: str
     date: float
+    uncertainty: float = 0.0
 
 @dataclass
 class Log:
@@ -38,7 +39,14 @@ def taxa_from_fasta(fasta_path, date_delimiter="|", date_index=-1) -> List[Taxon
     for line in fasta_lines:
         if line.startswith(">"):
             header = line[1:].strip()
-            taxa.append(Taxon(id=header, sequence="", date=float(header.split(date_delimiter)[date_index])))
+            # 1992/1 = 1992 to 1993
+            date_with_uncertainty = header.split(date_delimiter)[date_index]
+            date, *uncertainty = date_with_uncertainty.split("/")
+            if uncertainty:
+                uncertainty = float(uncertainty[0])
+            else:
+                uncertainty = 0.0
+            taxa.append(Taxon(id=header, sequence="", date=float(date), uncertainty=uncertainty))
         else:
             taxa[-1].sequence += line.strip()
 
