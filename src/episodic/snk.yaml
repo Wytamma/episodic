@@ -119,7 +119,7 @@ annotations:
       type: int
       help: "Number of threads to use for BEAST."
       required: false
-      default:
+      default: 4
     envmodules:
       type: List[str]
       help: "List of environment modules to load for beast."
