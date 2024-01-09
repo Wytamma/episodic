@@ -61,7 +61,7 @@ annotations:
     type: str
     help: "Delimiter to use to split the date from the rest of the header."
     required: false
-    default: '"|"'
+    default: '@'
   date_index:
     type: int
     help: "Index of the date in the header. 0-based."
