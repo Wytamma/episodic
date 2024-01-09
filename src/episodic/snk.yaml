@@ -120,6 +120,12 @@ annotations:
       help: "Number of threads to use for BEAST."
       required: false
       default:
+    envmodules:
+      type: List[str]
+      help: "List of environment modules to load for beast."
+      default:
+        - "GCC/11.3.0"
+        - "beagle-lib/3.1.2-CUDA-11.7.0"
   resources:
     default:
       account:
@@ -162,7 +168,3 @@ annotations:
       gres: 
         help: "GPU resource to request."
         default: gpu:1
-    envmodules:
-      default:
-        - "GCC/11.3.0"
-        - "beagle-lib/3.1.2-CUDA-11.7.0"
