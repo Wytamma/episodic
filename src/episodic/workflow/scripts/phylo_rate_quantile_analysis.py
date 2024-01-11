@@ -51,20 +51,27 @@ def analyze_rates(
         0.1, "--burnin", "-b", help="Fraction of trees to discard as burn-in"
     ),
 ):
-    trees = dendropy.TreeList.get(
-        path=trees_path, schema="nexus", preserve_underscores=True
+    tree_yielder = dendropy.Tree.yield_from_files(
+        files=[trees_path],
+        schema="nexus",
+        preserve_underscores=True
     )
 
-    trees = trees[int(len(trees) * burnin) :]
+    total_trees = sum(1 for _ in tree_yielder)  # Count total trees
+    tree_yielder = dendropy.Tree.yield_from_files(  # Reinitialize generator
+        files=[trees_path],
+        schema="nexus",
+        preserve_underscores=True
+    )
 
-    print(f"Loaded {len(trees)} trees from {trees_path}")
+    burnin_count = int(total_trees * burnin)
+    group_stats: Dict[str, Dict[str, List]] = {g: {"ranks": [], "quantiles": []} for g in groups}
 
-    group_stats: Dict[str, Dict[str, List]] = {
-        g: {"ranks": [], "quantiles": []} for g in groups
-    }
-
-    for tree in trees:
-        analyze_tree(tree, groups, group_stats)
+    with typer.progressbar(tree_yielder, length=total_trees, label="Processing trees") as progress:
+        for tree_idx, tree in enumerate(progress):
+            if tree_idx < burnin_count:
+                continue
+            analyze_tree(tree, groups, group_stats)
 
     csv_data = [
         [
