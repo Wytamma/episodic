@@ -82,6 +82,10 @@ annotations:
     help: Create a timestamped output subdirectory
     required: false
     default: false
+  template:
+    type: Path
+    help: "Path to an Episodic template file to use in the analysis."
+    required: false
   marginal_likelihood:
     estimate:
       type: bool

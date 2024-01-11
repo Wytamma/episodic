@@ -5,7 +5,7 @@ rule create_beast_xml:
     output:
         beast_XML_file = CLOCK_DIR / "{clock}" / "{name}" / "{name}.xml",
     params:
-        template = TEMPLATE_DIR / "beast_xml_template.jinja",
+        template = beast_xml_template,
         date_delimiter = "\|" if config.get("date_delimiter") == "|" else config.get("date_delimiter"),
         date_index = config.get("date_index", -1),
         groups = " ".join(config.get("group")),

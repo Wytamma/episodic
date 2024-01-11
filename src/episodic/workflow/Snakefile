@@ -18,6 +18,12 @@ default_resources = config["resources"].get("default", {})
 beast_resources = default_resources.copy()
 beast_resources.update(config["resources"].get("beast", {}))
 
+# template 
+if config["template"]:
+    beast_xml_template = config["template"]
+else:
+    beast_xml_template = TEMPLATE_DIR / "beast_xml_template.jinja"
+
 MLE: bool = config["marginal_likelihood"].get("estimate")
 fit_clocks: bool = config["fit_clocks"]
 rate_gamma_prior_scale=config["rate_gamma_prior_scale"]
