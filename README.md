@@ -1,4 +1,4 @@
-# episodic <img src='docs/images/logo.png' align="right" height="210" />
+# Episodic <img src='docs/images/logo.png' align="right" height="210" />
 
 A complete pipeline for fitting and testing Fixed Local Clock (FLC) molecular clock models for episodic evolution.
 
