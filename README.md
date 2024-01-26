@@ -22,7 +22,7 @@ Given a multiple sequence alignment and a list of groups to test for episodic ev
 - Produce maximum clade credibility (MCC) trees for each clock model.
 - Compute bayes factor on effect size for the FLC models (foreground vs background).
 - Run rank and quantile tests on the all the models.
-- Handel the execution of the pipeline on a HPC cluster.
+- Handel the execution of the pipeline on a HPC cluster via snakemake profiles.
 - Produce a report of the results (TBD).
 
 ## Features
