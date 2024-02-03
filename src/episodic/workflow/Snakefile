@@ -4,6 +4,10 @@ from scripts.populate_beast_template import taxa_from_fasta
 if config["alignment"] is None or config["group"] is None:
     raise ValueError("Must specify alignment and group")
 
+if type(config["group"]) != list:
+    # group must be list
+    config["group"] = [config["group"]]
+
 SNAKE_DIR = Path(workflow.basedir)
 TEMPLATE_DIR = SNAKE_DIR / "templates"
 SCRIPT_DIR = SNAKE_DIR / "scripts"
