@@ -1,36 +1,46 @@
-# Note that we use `threads` here as SLURM `--cpus-per-task`.
+reason: True
+show-failed-logs: True
+keep-going: True
+printshellcmds: True
+rerun-incomplete: True
+# Cluster submission
+jobname: "{rule}.{jobid}"              # Provide a custom name for the jobscript that is submitted to the cluster.
+max-jobs-per-second: 1                 #Maximal number of cluster/drmaa jobs per second, default is 10, fractions allowed.
+max-status-checks-per-second: 10       #Maximal number of job status checks per second, default is 10
+jobs: 400                              #Use at most N CPU cluster/cloud jobs in parallel.
 cluster: >-
-  mkdir -p logs && sbatch
-  $(if [[ '{resources.account}' ]]; then echo '-A {resources.account}'; fi)
-  $(if [[ '{resources.partition}' ]]; then echo '-p {resources.partition}'; fi)
-  --parsable
-  --time={resources.runtime}
-  --mem={resources.mem_mb}
+  sbatch --output=jobs/{rule}/slurm_%x_%j.out 
+  --error=jobs/{rule}/slurm_%x_%j.log 
+  --mem={resources.mem_mb} 
+  --time={resources.runtime} 
   -N {resources.nodes}
   -n {resources.tasks_per_node}
   -c {threads}
-  -o logs/{rule}-{wildcards}.out -e logs/{rule}-{wildcards}.err
   $(if [[ '{resources.qos}' ]]; then echo '-q {resources.qos}'; fi)
   $(if [[ '{resources.gres}' ]]; then echo '--gres={resources.gres}'; fi)
+  $(if [[ '{resources.account}' ]]; then echo '-A {resources.account}'; fi)
+  $(if [[ '{resources.partition}' ]]; then echo '-p {resources.partition}'; fi)
   {resources.extra}
+cluster-cancel: slurm-cancel
+# Job resources
+set-resources:
+  - run_beast:mem_mb=4G
+  - run_beast:runtime=10080
+  - run_beast:gres=gpu:1
+  - run_beast:partition=gpu-a100
+  - run_beast_mle:mem_mb=4G
+  - run_beast_mle:runtime=10080
+  - run_beast_mle:gres=gpu:1
+  - run_beast_mle:partition=gpu-a100
+  
+# For some reasons time needs quotes to be read by snakemake
 default-resources:
   - account=''
   - partition=''
-  - runtime=15
+  - runtime=120
   - mem_mb='4G'
   - nodes=1
   - tasks_per_node=1
   - qos='covid19'
   - gres=''
   - extra=''
-cluster-cancel: slurm-cancel
-jobs: 50
-use-conda: true
-use-envmodules: true
-printshellcmds: true
-rerun-incomplete: true
-keep-going: true
-local-cores: 1
-max-jobs-per-second: 10
-max-status-checks-per-second: 1
-latency-wait: 30

@@ -12,15 +12,15 @@ rule create_beast_xml:
         clock = lambda wildcards: wildcards.clock.split("_")[0],
         rate_gamma_prior_shape = config.get("rate_gamma_prior_shape"),
         rate_gamma_prior_scale = config.get("rate_gamma_prior_scale"),
-        chain_length = config.get("chain_length"),
-        samples = config.get("samples"),
+        chain_length = config["beast"].get("chain_length"),
+        samples = config["beast"].get("samples"),
         mle = lambda wildcards: "--mle" if "mle" in wildcards.name else "",
         mle_chain_length = f"--mle-chain-length {config['marginal_likelihood'].get('chain_length')}",
         mle_path_steps = f"--mle-path-steps {config['marginal_likelihood'].get('paths')}",
         mle_log_every = f"--mle-log-every {config['marginal_likelihood'].get('log_every')}",
         no_trace = lambda wildcards: "--no-trace" if "mle" in wildcards.name else "",
-        no_trees = lambda wildcards: "--no-trees" if not config.get("trees") or "mle" in wildcards.name else "",
-        fixed_tree = f'--fixed-tree {config.get("fixed_tree")}'  if config.get("fixed_tree") else "",
+        no_trees = lambda wildcards: "--no-trees" if "mle" in wildcards.name else "",
+        fixed_tree = f'--fixed-tree {config.get("newick")}'  if config.get("newick") else "",
     shell:
         """
         python {SCRIPT_DIR}/populate_beast_template.py \
@@ -52,7 +52,7 @@ rule run_beast:
     output:
         beast_stdout_file = CLOCK_DIR / "{clock}" / "{name}" / "{name}.stdout",
         beast_log_file = CLOCK_DIR / "{clock}" / "{name}" / "{name}.log",
-        **TREES,
+        beast_trees_file =  CLOCK_DIR / "{clock}" / "{name}" / "{name}.trees",
     threads: config["beast"].get("threads")
     resources:
         **beast_resources,

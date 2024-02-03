@@ -4,19 +4,21 @@ version: __about__.py
 annotations:
   alignment:
     type: Path
-    help: "Path to a fasta file containing the alignment."
-    required: true
+    help: "[REQUIRED] Path to a fasta file containing the alignment."
+    required: false
     short: a
+    default: null
   group:
     type: List[str]
-    help: "Group sequences containing this value (in the header) to define a FLC. Can specify multiple."
-    required: true
+    help: "[REQUIRED] Group sequences containing this value (in the header) to define a FLC. Can specify multiple."
+    required: false
     short: g
+    default: null
   clock:
     type: List[str]
-    help: "Clock models to test. Options are 'strict', 'relaxed', and 'flc-stem'. Can specify multiple."
+    help: "Molecular clock models to run. Options are 'strict', 'relaxed', and 'flc-stem'. Can specify multiple."
     required: false
-    default: ['strict', 'relaxed', 'flc-stem']
+    default: ['flc-stem']
   rate_gamma_prior_shape:
     type: float
     help: "Shape parameter for the gamma prior on the rate."
@@ -29,28 +31,6 @@ annotations:
     required: false
     default: 0.1
     short: scale
-  chain_length:
-    type: int
-    help: "Length of the chain."
-    required: false
-    default: 10000000
-    short: cl
-  samples:
-    type: int
-    help: "Number of samples to draw from the chain."
-    required: false
-    default: 10000
-    short: s
-  duplicates:
-    type: int
-    help: "Number of duplicate runs. To test for convergence."
-    required: false
-    default: 2
-  trees:
-    type: bool
-    help: "If false, the trees will not be saved."
-    required: false
-    default: true
   mcc_tree:
     heights:
       type: List[str]
@@ -71,21 +51,56 @@ annotations:
     type: Path
     help: "Path to a newick tree file. If provided topology will be fixed."
     required: false
-  outdir:
-    type: Path
-    help: "Path to the output directory."
-    required: false
-    default: results
-    short: o
-  dated:
-    type: bool
-    help: Create a timestamped output subdirectory
-    required: false
-    default: false
-  template:
-    type: Path
-    help: "Path to an Episodic template file to use in the analysis."
-    required: false
+  output:
+    dir:
+      type: Path
+      help: "Path to the output directory."
+      required: false
+      default: results
+      short: o
+    dated:
+      type: bool
+      help: Create a timestamped output subdirectory
+      required: false
+      default: false
+  beast:
+    chain_length:
+      type: int
+      help: "Length of the chain."
+      required: false
+      default: 10000000
+      short: cl
+    samples:
+      type: int
+      help: "Number of samples to draw from the chain."
+      required: false
+      default: 10000
+      short: s
+    duplicates:
+      type: int
+      help: "Number of duplicate runs. To test for convergence."
+      required: false
+      default: 2
+    template:
+      type: Path
+      help: "Path to an Episodic BEAST template file to use in the analysis."
+      required: false
+    fit_clocks:
+      type: bool
+      help: "If true, BEAST will be used to fit the clocks. Use --no-beast-fit-clocks to only run the MLE analysis."
+      required: false
+      default: true
+    threads:
+      type: int
+      help: "Max number of threads to use for BEAST."
+      required: false
+      default: 4
+    envmodules:
+      type: List[str]
+      help: "List of environment modules to load for beast."
+      default:
+        - "GCC/11.3.0"
+        - "beagle-lib/3.1.2-CUDA-11.7.0"
   marginal_likelihood:
     estimate:
       type: bool
@@ -113,23 +128,6 @@ annotations:
       help: "Number of duplicate MLE runs."
       required: false
       default: 3
-  fit_clocks:
-    type: bool
-    help: "If true, BEAST will be used to fit the clocks. Use --no-fit-clocks to only run the MLE analysis."
-    required: false
-    default: true
-  beast:
-    threads:
-      type: int
-      help: "Number of threads to use for BEAST."
-      required: false
-      default: 4
-    envmodules:
-      type: List[str]
-      help: "List of environment modules to load for beast."
-      default:
-        - "GCC/11.3.0"
-        - "beagle-lib/3.1.2-CUDA-11.7.0"
   resources:
     default:
       account:

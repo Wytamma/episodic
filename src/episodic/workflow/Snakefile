@@ -1,13 +1,15 @@
 from utils import decimal_year_to_date
 from scripts.populate_beast_template import taxa_from_fasta
 
+if config["alignment"] is None or config["group"] is None:
+    raise ValueError("Must specify alignment and group")
 
 SNAKE_DIR = Path(workflow.basedir)
 TEMPLATE_DIR = SNAKE_DIR / "templates"
 SCRIPT_DIR = SNAKE_DIR / "scripts"
 
-OUT_DIR=Path(config["outdir"])
-if config["dated"]:
+OUT_DIR=Path(config["output"]["dir"])
+if config["output"]["dated"]:
     # create timestamped output directory
     from datetime import datetime
     OUT_DIR = OUT_DIR / datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
@@ -19,13 +21,13 @@ beast_resources = default_resources.copy()
 beast_resources.update(config["resources"].get("beast", {}))
 
 # template 
-if config["template"]:
-    beast_xml_template = config["template"]
+if config["beast"]["template"]:
+    beast_xml_template = config["beast"]["template"]
 else:
     beast_xml_template = TEMPLATE_DIR / "beast_xml_template.jinja"
 
 MLE: bool = config["marginal_likelihood"].get("estimate")
-fit_clocks: bool = config["fit_clocks"]
+fit_clocks: bool = config["beast"]["fit_clocks"]
 rate_gamma_prior_scale=config["rate_gamma_prior_scale"]
 rate_gamma_prior_shape=config["rate_gamma_prior_shape"]
 clocks = expand("{clock}_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}", clock=config["clock"], rate_gamma_prior_shape=rate_gamma_prior_shape, rate_gamma_prior_scale=rate_gamma_prior_scale)
@@ -35,7 +37,7 @@ alignment_path=config["alignment"]
 date_delimiter=config["date_delimiter"]
 date_index=config["date_index"]
 
-duplicates = range(1, config["duplicates"] + 1) if fit_clocks else []
+duplicates = range(1, config['beast']["duplicates"] + 1) if fit_clocks else []
 mle_duplicates = range(1, config["marginal_likelihood"].get("duplicates") + 1) if MLE else []
 
 ALL_LOG_FILES = expand(CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.log", clock=clocks, duplicate=duplicates)

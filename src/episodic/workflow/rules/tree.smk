@@ -8,7 +8,7 @@ rule max_clade_credibility_tree:
     output:
         CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.nexus",
     params:
-        burnin = int(int(config['samples']) * 0.1),
+        burnin = int(int(config['beast']['samples']) * 0.1),
     conda:
         "../envs/beast.yml"
     resources:
