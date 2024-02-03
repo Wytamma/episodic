@@ -54,8 +54,6 @@ rule run_beast:
         beast_log_file = CLOCK_DIR / "{clock}" / "{name}" / "{name}.log",
         beast_trees_file =  CLOCK_DIR / "{clock}" / "{name}" / "{name}.trees",
     threads: config["beast"].get("threads")
-    resources:
-        **beast_resources,
     envmodules:
         *config["beast"].get("envmodules", []),
     conda:

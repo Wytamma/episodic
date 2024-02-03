@@ -15,11 +15,6 @@ if config["output"]["dated"]:
     OUT_DIR = OUT_DIR / datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
 CLOCK_DIR = OUT_DIR / "clocks"
 
-# resources
-default_resources = config["resources"].get("default", {})
-beast_resources = default_resources.copy()
-beast_resources.update(config["resources"].get("beast", {}))
-
 # template 
 if config["beast"]["template"]:
     beast_xml_template = config["beast"]["template"]
