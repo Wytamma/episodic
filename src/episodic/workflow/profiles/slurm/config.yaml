@@ -9,10 +9,10 @@ max-jobs-per-second: 1                 #Maximal number of cluster/drmaa jobs per
 max-status-checks-per-second: 10       #Maximal number of job status checks per second, default is 10
 jobs: 400                              #Use at most N CPU cluster/cloud jobs in parallel.
 cluster: >-
-  sbatch --output=jobs/{rule}/slurm_%x_%j.out 
-  --error=jobs/{rule}/slurm_%x_%j.log 
-  --mem={resources.mem_mb} 
-  --time={resources.runtime} 
+  sbatch --parsable --output=jobs/{rule}/slurm_%x_%j.out
+  --error=jobs/{rule}/slurm_%x_%j.log
+  --mem={resources.mem_mb}
+  --time={resources.runtime}
   -N {resources.nodes}
   -n {resources.tasks_per_node}
   -c {threads}
@@ -21,7 +21,7 @@ cluster: >-
   $(if [[ '{resources.account}' ]]; then echo '-A {resources.account}'; fi)
   $(if [[ '{resources.partition}' ]]; then echo '-p {resources.partition}'; fi)
   {resources.extra}
-cluster-cancel: slurm-cancel
+cluster-cancel: scancel
 # Job resources
 set-resources:
   - run_beast:mem_mb=4G
