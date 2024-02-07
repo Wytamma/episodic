@@ -5,6 +5,8 @@ rule extract_mle:
         expand(OUT_DIR / "mle" / "{clock}" / "{clock}_mle_{duplicate}.stdout", clock=clocks, duplicate=mle_duplicates),
     output:
         MLE_DIR / "mle.svg",
+        MLE_DIR / "mle.csv",
+        MLE_DIR / "mle.grouped.csv",
     conda:
         "../envs/python.yml"
     shell:
