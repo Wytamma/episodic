@@ -83,24 +83,24 @@ CLOCK_FILES.extend(
         rate_gamma_prior_scale=rate_gamma_prior_scale
     ),
 )
-if config.get("trees"):
-    CLOCK_FILES.extend(
-        expand(
-            CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.mcc.{heights}.{ext}",
-            clock=clocks,
-            duplicate=duplicates,
-            heights=config["mcc_tree"].get("heights", "mean"),
-            ext=["nwk", "svg"]
-        ),
+
+CLOCK_FILES.extend(
+    expand(
+        CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.mcc.{heights}.{ext}",
+        clock=clocks,
+        duplicate=duplicates,
+        heights=config["mcc_tree"].get("heights", "mean"),
+        ext=["nwk", "svg"]
+    ),
+)
+CLOCK_FILES.extend(
+    expand(
+        CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.rate_quantiles.{ext}", 
+        clock=clocks, 
+        duplicate=duplicates, 
+        ext=["csv", "svg"]
     )
-    CLOCK_FILES.extend(
-        expand(
-            CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.rate_quantiles.{ext}", 
-            clock=clocks, 
-            duplicate=duplicates, 
-            ext=["csv", "svg"]
-        )
-    )
+)
 
 
 
