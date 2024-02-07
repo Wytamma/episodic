@@ -1,0 +1,33 @@
+alignment: tests/data/BA.2.86.afa
+beast:
+  chain_length: 10000
+  duplicates: 2
+  envmodules:
+  - GCC/11.3.0
+  - beagle-lib/3.1.2-CUDA-11.7.0
+  fit_clocks: false
+  samples: 10000
+  template: null
+  threads: 4
+clock:
+- flc-stem
+date_delimiter: '@'
+date_index: -1
+group: 
+- BA.2.86
+marginal_likelihood:
+  chain_length: 1000
+  duplicates: 3
+  estimate: false
+  log_every: 100
+  paths: 10
+mcc_tree:
+  heights:
+  - mean
+newick: null
+output:
+  dated: false
+  dir: results
+rate_gamma_prior_scale: 0.1
+rate_gamma_prior_shape: 0.5
+
