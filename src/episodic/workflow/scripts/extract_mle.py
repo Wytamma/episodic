@@ -80,12 +80,9 @@ fig.savefig(output.with_suffix('.svg'), dpi=300, bbox_inches='tight')
 # save the data frame
 df.to_csv(output.with_suffix('.csv'), index=False)
 
-# Save the mean and standard deviation of the mle
-with open(output.with_suffix('.txt'), 'w') as f:
-    f.write(f"Mean: {df['log(MLE)'].mean()}\n")
-    f.write(f"Std: {df['log(MLE)'].std()}\n")
-    f.write(f"Median: {df['log(MLE)'].median()}\n")
-    f.write(f"Min: {df['log(MLE)'].min()}\n")
-    f.write(f"Max: {df['log(MLE)'].max()}\n")
-    f.write(f"Range: {df['log(MLE)'].max() - df['log(MLE)'].min()}\n")
-    f.write(f"Range (abs): {abs(df['log(MLE)'].max()) - abs(df['log(MLE)'].min())}\n")
+# group the data frame by clock and save the mean and standard deviation
+df = df.groupby('Clock').agg(['mean', 'std'])
+# reset the headers
+df.columns = df.columns.droplevel()
+# save the grouped data frame
+df.to_csv(output.with_suffix('.grouped.csv'))
