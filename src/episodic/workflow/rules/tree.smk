@@ -54,8 +54,8 @@ rule rate_quantile_analysis:
     input:
         rules.run_beast.output.beast_trees_file,
     output:
-        csv = CLOCK_DIR / "{clock}" / "{name}" / "{name}.rate_quantiles.csv",
-        svg = CLOCK_DIR / "{clock}" / "{name}" / "{name}.rate_quantiles.svg",
+        csv = CLOCK_DIR / "{clock}" / "{name}" / "{name}.stem.rate_quantiles.csv",
+        svg = CLOCK_DIR / "{clock}" / "{name}" / "{name}.stem.rate_quantiles.svg",
     params:
         groups = " ".join(f"-g {group}" for group in config['group']),
     conda:

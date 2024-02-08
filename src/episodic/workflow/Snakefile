@@ -95,9 +95,9 @@ CLOCK_FILES.extend(
 )
 CLOCK_FILES.extend(
     expand(
-        CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.rate_quantiles.{ext}", 
-        clock=clocks, 
-        duplicate=duplicates, 
+        CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_{duplicate}.stem.rate_quantiles.{ext}", 
+        clock=relaxed_clocks, 
+        duplicate=duplicates,
         ext=["csv", "svg"]
     )
 )
