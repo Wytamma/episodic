@@ -9,7 +9,7 @@ episodic = CLI(Path(__file__).parent.parent)
 
 @episodic.app.command()
 def template():
-    """Display the BEAST XML template."""
-    template_path = episodic.pipeline.path / "workflow/templates/beast_xml_template.jinja"
+    """Show the BEAST XML template."""
+    template_path = episodic.workflow.path / "workflow/templates/beast_xml_template.jinja"
     template = template_path.read_text()
-    print(template)
+    episodic.echo(template)
