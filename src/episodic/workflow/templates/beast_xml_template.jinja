@@ -55,9 +55,7 @@
 
 	<!-- Generate a starting tree                                                 -->
 	{% if fixedTree %}
-	<fixedTree id="startingTree">
-		<newick>{{fixedTree}}</newick>
-	</fixedTree>
+	<newick id="startingTree">{{fixedTree}}</newick>
 	{% else %}
 	<coalescentSimulator id="startingTree">
 		{% for group in groups %}
