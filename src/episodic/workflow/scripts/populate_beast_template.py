@@ -136,7 +136,7 @@ if __name__ == "__main__":
     parser.add_argument("--date-delimiter", type=str, default="|", help="Delimiter for the date in the fasta header.")
     parser.add_argument("--date-index", type=int, default=-1, help="Index of the date in the fasta header.")
     parser.add_argument("--groups", nargs="+", required=True, help="List of groups to include in the analysis. Space-separated list.")
-    parser.add_argument("--clock", type=str, help="Clock model to use in the analysis.", choices=["strict", "relaxed", "flc-stem"])
+    parser.add_argument("--clock", type=str, help="Clock model to use in the analysis.", choices=["strict", "relaxed", "flc-stem", "flc-shared-stem"])
     parser.add_argument("--rate-gamma-prior-shape", type=float, default=0.5, help="Shape parameter of the gamma prior on the rate.")
     parser.add_argument("--rate-gamma-prior-scale", type=float, default=0.1, help="Scale parameter of the gamma prior on the rate.")
     parser.add_argument("--chain-length", type=int, default=100000000, help="Length of the MCMC chain.")
