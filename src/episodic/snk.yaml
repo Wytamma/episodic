@@ -16,7 +16,7 @@ annotations:
     default: null
   clock:
     type: List[str]
-    help: "Molecular clock models to run. Options are 'strict', 'relaxed', and 'flc-stem'. Can specify multiple."
+    help: "Molecular clock models to run. Options are 'strict', 'relaxed', 'flc-stem', 'flc-shared-stem', 'flc-clade', and 'flc-shared-clade'. Can specify multiple."
     required: false
     default: ['flc-stem']
   rate_gamma_prior_shape:

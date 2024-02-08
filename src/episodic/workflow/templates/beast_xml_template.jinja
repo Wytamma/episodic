@@ -184,6 +184,15 @@
 			<parameter id="{{ group }}.clade.rate" value="1.0" lower="0.0"/>
 			<taxa idref="{{ group }}"/>
 		</clade>
+		{% elif clock == 'flc-shared-clade' %}
+		<clade includeStem="false" excludeClade="false">
+			{% if loop.first %}
+			<parameter id="clade.rate" value="1.0" lower="0.0"/>
+			{% else %}
+			<rate idref="clade.rate"/>
+			{% endif %}
+			<taxa idref="{{ group }}"/>
+		</clade>
 		{% endif %}
 		{% endfor %}
 		<externalBranches>
@@ -325,6 +334,10 @@
 			<parameter idref="{{ group }}.clade.rate"/>
 		</scaleOperator>
 		{% endfor %}
+		{% elif clock == 'flc-shared-clade' %}
+		<scaleOperator scaleFactor="0.75" weight="3">
+			<parameter idref="clade.rate"/>
+		</scaleOperator>
 		{% endif %}
 		{% endif %}
 		{% if not fixedTree %}
@@ -402,6 +415,10 @@
 					<parameter idref="{{ group }}.clade.rate"/>
 				</gammaPrior>
 				{% endfor %}
+				{% elif clock == 'flc-shared-clade' %}
+				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
+					<parameter idref="clade.rate"/>
+				</gammaPrior>
 				{% endif %}
 				{% endif %}
 				<exponentialPrior mean="100.0" offset="0.0">
@@ -483,6 +500,8 @@
 			{% for group in groups %}
 			<parameter idref="{{ group }}.clade.rate"/>
 			{% endfor %}
+			{% elif clock == 'flc-shared-clade' %}
+			<parameter idref="clade.rate"/>
 			{% endif %}
 			{% endif %}
 			<rateStatistic idref="meanRate"/>
