@@ -167,18 +167,26 @@
 			<parameter id="clock.rate" value="1.0" lower="0.0"/>
 		</rate>
 		{% for group in groups %}
+		{% if  clock == 'flc-stem' %}
 		<clade includeStem="true" excludeClade="true">
-			{% if  clock == 'flc-stem' %}
 			<parameter id="{{ group }}.stem.rate" value="1.0" lower="0.0"/>
-			{% elif clock == 'flc-shared-stem' %}
+			<taxa idref="{{ group }}"/>
+		</clade>
+		{% elif clock == 'flc-shared-stem' %}
+		<clade includeStem="true" excludeClade="true">
 			{% if loop.first %}
 			<parameter id="stem.rate" value="1.0" lower="0.0"/>
 			{% else %}
 			<rate idref="stem.rate"/>
 			{% endif %}
-			{% endif %}
 			<taxa idref="{{ group }}"/>
 		</clade>
+		{% elif clock == 'flc-clade' %}
+		<clade includeStem="false" excludeClade="false">
+			<parameter id="{{ group }}.clade.rate" value="1.0" lower="0.0"/>
+			<taxa idref="{{ group }}"/>
+		</clade>
+		{% endif %}
 		{% endfor %}
 		<externalBranches>
 			<parameter idref="clock.rate"/>
@@ -313,6 +321,12 @@
 		<scaleOperator scaleFactor="0.75" weight="3">
 			<parameter idref="stem.rate"/>
 		</scaleOperator>
+		{% elif clock == 'flc-clade' %}
+		{% for group in groups %}
+		<scaleOperator scaleFactor="0.75" weight="3">
+			<parameter idref="{{ group }}.clade.rate"/>
+		</scaleOperator>
+		{% endfor %}
 		{% endif %}
 		{% endif %}
 		{% if not fixedTree %}
@@ -384,6 +398,12 @@
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
 					<parameter idref="stem.rate"/>
 				</gammaPrior>
+				{% elif clock == 'flc-clade' %}
+				{% for group in groups %}
+				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
+					<parameter idref="{{ group }}.clade.rate"/>
+				</gammaPrior>
+				{% endfor %}
 				{% endif %}
 				{% endif %}
 				<exponentialPrior mean="100.0" offset="0.0">
@@ -461,6 +481,10 @@
 			{% endfor %}
 			{% elif clock == 'flc-shared-stem' %}
 			<parameter idref="stem.rate"/>
+			{% elif clock == 'flc-clade' %}
+			{% for group in groups %}
+			<parameter idref="{{ group }}.clade.rate"/>
+			{% endfor %}
 			{% endif %}
 			{% endif %}
 			<rateStatistic idref="meanRate"/>
