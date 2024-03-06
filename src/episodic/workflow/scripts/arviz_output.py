@@ -20,11 +20,32 @@ app = typer.Typer()
 
 @contextmanager
 def no_browser():
+    """
+    A context manager that temporarily replaces the Bokeh show function with a dummy one.
+
+    Yields:
+      None: Allows the code inside the 'with' block to run.
+
+    Notes:
+      This context manager is used to prevent the Bokeh show function from opening a browser window when saving a plot.
+    """
     # Save the original show function
     original_show = bokeh.io.showing._show_file_with_state
 
     # Define a custom show function that does nothing
     def dummy_show(obj, state, *args, **kwargs):
+        """
+    A custom show function that does nothing.
+
+    Args:
+      obj (object): The object to show.
+      state (object): The state of the object.
+      *args: Additional positional arguments.
+      **kwargs: Additional keyword arguments.
+
+    Returns:
+      None: Does not return anything.
+    """
         filename = save(obj, state=state)
 
     # Replace the Bokeh show function with the dummy one
@@ -37,6 +58,16 @@ def no_browser():
         bokeh.io.showing._show_file_with_state = original_show
 
 def load_log_files(logs: List[Path], burnin: float = 0.1) -> pd.DataFrame:
+    """
+    Loads BEAST log files into a single pandas DataFrame.
+
+    Args:
+      logs (List[Path]): A list of paths to the log files.
+      burnin (float): The fraction of the chain to discard as burnin.
+
+    Returns:
+      pd.DataFrame: A DataFrame containing the log data.
+    """
     model_groups = defaultdict(list)
     for path in logs:
         model = path.parent.parent.name # assumes that the model name is the parent of the parent of the log file
@@ -75,6 +106,19 @@ def rates(
     gamma_scale: float = typer.Option(..., help="Scale parameter for the gamma prior"),
     burnin: float = typer.Option(0.1, help="Fraction of the chain to discard as burnin"),
 ):
+    """
+    Plots the rates from BEAST log files.
+
+    Args:
+      logs (List[Path]): A list of paths to the log files.
+      output_prefix (Path): The prefix for the output files.
+      gamma_shape (float): The shape parameter for the gamma prior.
+      gamma_scale (float): The scale parameter for the gamma prior.
+      burnin (float): The fraction of the chain to discard as burnin.
+
+    Returns:
+      None: Does not return anything.
+    """
     df = load_log_files(logs, burnin=burnin)
 
     # extract the rate columns
@@ -133,6 +177,17 @@ def trace(
         directory: Path = typer.Argument(..., help="Output directory"),
         burnin: float = typer.Option(0.1, help="Fraction of the chain to discard as burnin"),
 ):
+    """
+    Plots the trace from BEAST log files.
+
+    Args:
+      logs (List[Path]): A list of paths to the log files.
+      directory (Path): The output directory.
+      burnin (float): The fraction of the chain to discard as burnin.
+
+    Returns:
+      None: Does not return anything.
+    """
     df = load_log_files(logs, burnin=burnin)
 
     # convert to xarray
@@ -153,6 +208,17 @@ def summary(
         output: Path = typer.Argument(..., help="Output csv file"),
         burnin: float = 0.1,
     ):
+    """
+    Generates a summary of the BEAST log files and saves it to a csv file.
+
+    Args:
+      logs (List[Path]): A list of paths to the log files.
+      output (Path): The output csv file.
+      burnin (float): The fraction of the chain to discard as burnin.
+
+    Returns:
+      None: Does not return anything.
+    """
 
     df = load_log_files(logs, burnin=burnin)
 

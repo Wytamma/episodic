@@ -17,6 +17,20 @@ def safe_log(x):
 
 
 def calculate_log_diff(pos_odds, p_odds):
+    """
+    Calculates the log difference of two odds ratios.
+
+    Args:
+      pos_odds (float): The posterior odds ratio.
+      p_odds (float): The prior odds ratio.
+
+    Returns:
+      float: The log difference of the two odds ratios.
+
+    Examples:
+      >>> calculate_log_diff(2, 1)
+      0.6931471805599453
+    """
     log_pos_odds = safe_log(pos_odds)
     log_p_odds = safe_log(p_odds)
 
@@ -40,6 +54,23 @@ def calculate_odds(
     gamma_scale: float = typer.Option(..., help="The scale parameter for the gamma distribution"),
     burnin: float = typer.Option(0.1, "--burnin", "-b", help="Fraction of trees to discard as burn-in"),
 ):
+    """
+    Calculates the odds and log differences for a given set of data.
+
+    Args:
+      logs (List[Path]): The paths to the log CSV files.
+      output_file (str): The path to the output CSV file where the results will be saved.
+      gamma_shape (float): The shape parameter for the gamma distribution.
+      gamma_scale (float): The scale parameter for the gamma distribution.
+      burnin (float): Fraction of trees to discard as burn-in.
+
+    Returns:
+      None
+
+    Examples:
+      >>> calculate_odds(['log1.csv', 'log2.csv'], 'results.csv', 2, 1, 0.1)
+      Calculated odds and log differences saved to results.csv
+    """
     # Read the CSV file into a DataFrame df
     dfs = []
     for log_path in logs:

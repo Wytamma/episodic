@@ -9,6 +9,15 @@ from jinja2 import StrictUndefined, Template
 
 @dataclass
 class Taxon:
+    """
+    Dataclass representing a taxon.
+
+    Attributes:
+      id (str): The id of the taxon.
+      sequence (str): The sequence of the taxon.
+      date (float): The date of the taxon.
+      uncertainty (float): The uncertainty of the taxon's date.
+    """
     id: str
     sequence: str
     date: float
@@ -16,17 +25,48 @@ class Taxon:
 
 @dataclass
 class Log:
+    """
+    Dataclass representing a log file.
+
+    Attributes:
+      log_every (int): The frequency at which to log.
+      file_name (str): The name of the log file.
+    """
     log_every: int
     file_name: str
 
 @dataclass
 class MLE(Log):
+    """
+    Dataclass representing a marginal likelihood estimator.
+
+    Attributes:
+      log_every (int): The frequency at which to log.
+      file_name (str): The name of the log file.
+      results_file_name (str): The name of the results file.
+      chain_length (int): The length of the MCMC chain.
+      path_steps (int): The number of path steps for the MLE.
+    """
     results_file_name: str
     chain_length: int
     path_steps: int
 
 
 def taxa_from_fasta(fasta_path, date_delimiter="|", date_index=-1) -> List[Taxon]:
+    """
+    Parses a fasta file into a list of Taxon objects.
+
+    Args:
+      fasta_path (Path): The path to the fasta file.
+      date_delimiter (str): The delimiter for the date in the fasta header.
+      date_index (int): The index of the date in the fasta header.
+
+    Returns:
+      List[Taxon]: A list of Taxon objects representing the taxa in the fasta file.
+
+    Raises:
+      ValueError: If the fasta file is invalid.
+    """
     # Read the fasta file
     with open(fasta_path) as fasta_file:
         fasta_lines = fasta_file.readlines()
@@ -74,6 +114,59 @@ def populate_beast_template(
         trees: bool = True,
         mle: bool = True,
     ):
+    """
+    Populates a Beast XML template with an alignment file.
+
+    Args:
+      work_dir (Path): The path to the working directory.
+      name (str): The name of the output file.
+      template_path (Path): The path to the input Beast template file.
+      alignment_path (Path): The path to the input alignment file.
+      groups (list): A list of groups to include in the analysis.
+      clock (str): The clock model to use in the analysis.
+      rate_gamma_prior_shape (float): The shape parameter of the gamma prior on the rate.
+      rate_gamma_prior_scale (float): The scale parameter of the gamma prior on the rate.
+      chain_length (int): The length of the MCMC chain.
+      samples (int): The number of samples to draw from the MCMC chain.
+      mle_chain_length (int): The length of the MCMC chain for the marginal likelihood estimator.
+      mle_path_steps (int): The number of path steps for the marginal likelihood estimator.
+      mle_log_every (int): The log every for the marginal likelihood estimator.
+      date_delimiter (str): The delimiter for the date in the fasta header.
+      date_index (int): The index of the date in the fasta header.
+      fixed_tree (Path): The path to the fixed tree file.
+
+    Keyword Args:
+      trace (bool): Whether to enable the trace log.
+      trees (bool): Whether to enable the trees log.
+      mle (bool): Whether to run the marginal likelihood estimator.
+
+    Returns:
+      str: The rendered Beast XML template.
+
+    Examples:
+      >>> populate_beast_template(
+      ...     work_dir=Path("output"),
+      ...     name="my_analysis",
+      ...     template_path=Path("template.xml"),
+      ...     alignment_path=Path("alignment.fasta"),
+      ...     groups=["group1", "group2"],
+      ...     clock="strict",
+      ...     rate_gamma_prior_shape=0.5,
+      ...     rate_gamma_prior_scale=0.1,
+      ...     chain_length=100000000,
+      ...     samples=10000,
+      ...     mle_chain_length=1000000,
+      ...     mle_path_steps=100,
+      ...     mle_log_every=10000,
+      ...     date_delimiter="|",
+      ...     date_index=-1,
+      ...     fixed_tree=Path("fixed_tree.nwk"),
+      ...     trace=True,
+      ...     trees=True,
+      ...     mle=True,
+      ... )
+      <Rendered Beast XML template>
+    """
     # Load the template
     template = Template(template_path.read_text(), undefined=StrictUndefined)
 

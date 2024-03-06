@@ -10,6 +10,20 @@ from plotly.subplots import make_subplots
 
 
 def format_fig(fig):
+    """
+    Formats the given figure with custom layout and style.
+
+    Args:
+      fig (plotly.graph_objects.Figure): The figure to format.
+
+    Returns:
+      None.
+
+    Examples:
+      >>> fig = go.Figure()
+      >>> format_fig(fig)
+      None
+    """
     fig.update_layout(
         width=1200,
         height=550,
@@ -45,6 +59,24 @@ def plot_traces(
     output: Path = typer.Argument(..., help="A path to the output directory."),
     burnin: float = 0.1,
 ):
+    """
+    Plots the traces from a trace log file.
+
+    Args:
+      trace_log (pathlib.Path): The path to the trace log from beast.
+      output (pathlib.Path): A path to the output directory.
+      burnin (float): The percentage of the trace to discard as burn-in.
+
+    Returns:
+      None.
+
+    Examples:
+      >>> trace_log = Path('trace.log')
+      >>> output = Path('output')
+      >>> burnin = 0.1
+      >>> plot_traces(trace_log, output, burnin)
+      None
+    """
     output.mkdir(exist_ok=True, parents=True)
 
     df = pd.read_csv(trace_log, sep="\t", comment="#")

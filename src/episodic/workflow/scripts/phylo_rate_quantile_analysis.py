@@ -11,6 +11,19 @@ import typer
 app = typer.Typer()
 
 def extract_and_sort_rates(tree):
+    """
+    Extracts and sorts rates from a given tree.
+
+    Args:
+      tree (dendropy.Tree): The tree to extract rates from.
+
+    Returns:
+      List[float]: A list of sorted rates.
+
+    Examples:
+      >>> extract_and_sort_rates(tree)
+      [0.1, 0.2, 0.3]
+    """
     rates = [
         float(node.annotations.get_value("rate"))
         for node in tree
@@ -20,6 +33,20 @@ def extract_and_sort_rates(tree):
     return sorted_rates
 
 def analyze_tree(tree, groups, group_stats):
+    """
+    Analyzes a given tree and updates group statistics.
+
+    Args:
+      tree (dendropy.Tree): The tree to analyze.
+      groups (List[str]): The group labels to analyze.
+      group_stats (Dict[str, Dict[str, List]]): A dictionary containing group statistics.
+
+    Returns:
+      None
+
+    Examples:
+      >>> analyze_tree(tree, ['A', 'B'], {'A': {'ranks': [], 'quantiles': []}, 'B': {'ranks': [], 'quantiles': []}})
+    """
     # Assuming sorted_rates is generated here for each tree passed to this function
     sorted_rates = extract_and_sort_rates(tree)
     rates = np.array(sorted_rates)  # For efficient operations with numpy
@@ -45,6 +72,22 @@ def analyze_rates(
     output_csv_path: str = typer.Option(..., "--output-csv", help="Output path for the CSV file"),
     burnin: float = typer.Option(0.1, "--burnin", "-b", help="Fraction of trees to discard as burn-in"),
 ):
+    """
+    Analyzes rates from a given BEAST output trees file and generates a plot and CSV file.
+
+    Args:
+      trees_path (str): The path to the BEAST output trees file.
+      groups (List[str]): The group labels to analyze.
+      output_plot_path (str): The output path for the plot file.
+      output_csv_path (str): The output path for the CSV file.
+      burnin (float): The fraction of trees to discard as burn-in.
+
+    Returns:
+      None
+
+    Examples:
+      >>> analyze_rates('trees.nexus', ['A', 'B'], 'plot.png', 'stats.csv', 0.1)
+    """
     # time ow long it takes to run
     now = datetime.now()
     tree_yielder = dendropy.Tree.yield_from_files(files=[trees_path], schema="nexus", preserve_underscores=True)
