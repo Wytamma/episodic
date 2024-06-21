@@ -1,7 +1,7 @@
 from utils import decimal_year_to_date
 from scripts.populate_beast_template import taxa_from_fasta
 
-if config["alignment"] is None or config["group"] is None:
+if config["alignment"] is None or not config["group"]:
     raise ValueError("Must specify alignment and group")
 
 if type(config["group"]) != list:

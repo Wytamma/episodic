@@ -7,3 +7,4 @@ BA.2.86-UCGD.trees
 out.csv
 tests/data/relaxed_7_0.0001_1.trees
 .DS_Store
+clocks/
