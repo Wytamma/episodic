@@ -56,7 +56,7 @@ annotations:
       type: Path
       help: "Path to the output directory."
       required: false
-      default: results
+      default: "."
       short: o
     dated:
       type: bool
