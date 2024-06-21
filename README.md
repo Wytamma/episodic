@@ -14,7 +14,7 @@ Episodic is a tool for fitting and testing Fixed Local Clock (FLC) molecular clo
 Episodic implements the ideas of Tay et al. ([2022](https://pubmed.ncbi.nlm.nih.gov/35038741/) and [2023](https://academic.oup.com/mbe/article/40/10/msad212/7280106)) and detects episodic evolution through Bayesian inference of molecular clock models. 
 
 Given a multiple sequence alignment and a list of groups to test for episodic evolution, episodic will:
-- Configure BEAST analyses for strict, relaxed (UCGD) and stem fixed local clock models. 
+- Configure BEAST analyses for strict, relaxed (UCGD) and fixed local clock models. 
 - Configure marginal likelihood analyses for each clock model.
 - Run all the BEAST and marginal likelihood analyses.
 - Plot and summarise the results.
