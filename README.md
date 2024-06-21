@@ -38,6 +38,12 @@ Given a multiple sequence alignment and a list of groups to test for episodic ev
 pip install episodic
 ```
 
+## CLI
+
+![](docs/images/cli.png)
+
+![](docs/images/run_cli.png)
+
 ## Outputs
 Episodic will produce a range on log files, trees and plots. The following is a list of the main outputs.
 
