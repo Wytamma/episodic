@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: MIT
 from pathlib import Path
 
-from snk.cli import CLI
+from snk_cli import CLI
 
 episodic = CLI(Path(__file__).parent.parent)
 
