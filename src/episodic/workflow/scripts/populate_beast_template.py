@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import List, Optional
 
 from jinja2 import StrictUndefined, Template
+from episodic.workflow.utils import date_to_decimal_year
 
 
 @dataclass
@@ -86,6 +87,10 @@ def taxa_from_fasta(fasta_path, date_delimiter="|", date_index=-1) -> List[Taxon
                 uncertainty = float(uncertainty[0])
             else:
                 uncertainty = 0.0
+            try:
+                date = float(date)
+            except ValueError:
+                date = date_to_decimal_year(date)
             taxa.append(Taxon(id=header, sequence="", date=float(date), uncertainty=uncertainty))
         else:
             taxa[-1].sequence += line.strip()
