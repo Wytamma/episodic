@@ -3,8 +3,8 @@ tagline: A pipeline for fitting and testing Fixed Local Clock (FLC) molecular cl
 version: __about__.py
 annotations:
   alignment:
-    type: Path
-    help: "[REQUIRED] Path to a fasta file containing the alignment."
+    type: List[Path]
+    help: "[REQUIRED] Path to a fasta file containing an alignment partition. Repeat --alignment for multiple partitions."
     required: false
     short: a
     default: null
@@ -16,7 +16,7 @@ annotations:
     default: null
   clock:
     type: List[str]
-    help: "Molecular clock models to run. Options are 'strict', 'relaxed', 'flc-stem', 'flc-shared-stem', 'flc-clade', and 'flc-shared-clade'. Can specify multiple."
+    help: "Molecular clock models to run. Options are 'strict', 'relaxed', 'flc-stem', 'flc-shared-stem', 'flc-clade', 'flc-shared-clade', 'flc-stem-and-clade', and 'flc-shared-stem-and-clade'. Can specify multiple."
     required: false
     default: ['flc-stem']
   rate_gamma_prior_shape:

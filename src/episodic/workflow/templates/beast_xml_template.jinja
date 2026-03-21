@@ -11,7 +11,7 @@
 		</taxon>
 		{% endfor %}
 	</taxa >
-	
+
 	<!-- Groups for FLC -->
 	{% for group in groups %}
     <taxa id="{{ group }}">
@@ -22,11 +22,11 @@
 		{%- endfor %}
     </taxa>
 	{% endfor %}
-	
 
-	<!-- The sequence alignment (each sequence refers to a taxon above).         -->
-	<alignment id="alignment" dataType="nucleotide">
-		{% for taxon in taxa %}
+	<!-- The sequence alignments (each sequence refers to a taxon above). -->
+	{% for partition in partitions %}
+	<alignment id="alignment.{{ partition.prefix }}" dataType="nucleotide">
+		{% for taxon in partition.taxa %}
 		<sequence>
 			<taxon idref="{{ taxon.id }}"/>
 			{{ taxon.sequence }}
@@ -34,14 +34,12 @@
 		{% endfor %}
 	</alignment>
 
-	
-	<!-- The unique patterns from 1 to end                                       -->
-	<patterns id="patterns" from="1" strip="false">
-		<alignment idref="alignment"/>
+	<patterns id="patterns.{{ partition.prefix }}" from="1" strip="false">
+		<alignment idref="alignment.{{ partition.prefix }}"/>
 	</patterns>
-	
-	<!-- A prior assumption that the population size has grown exponentially     -->
-	<!-- throughout the time spanned by the genealogy.                           -->
+	{% endfor %}
+
+	<!-- A prior assumption that the population size has grown exponentially -->
 	<exponentialGrowth id="exponential" units="years">
 		<populationSize>
 			<parameter id="exponential.popSize" value="1.0" lower="0.0"/>
@@ -50,10 +48,8 @@
 			<parameter id="exponential.growthRate" value="0.0"/>
 		</growthRate>
 	</exponentialGrowth>
-	
 
-
-	<!-- Generate a starting tree                                                 -->
+	<!-- Generate a starting tree -->
 	{% if fixedTree %}
 	<newick id="startingTree">{{fixedTree}}</newick>
 	{% else %}
@@ -68,9 +64,8 @@
         <exponentialGrowth idref="exponential"/>
     </coalescentSimulator>
 	{% endif %}
-	
 
-	<!-- Generate a tree model                                                   -->
+	<!-- Generate a tree model -->
 	<treeModel id="treeModel">
 		{% if fixedTree %}
 		<newick idref="startingTree"/>
@@ -88,18 +83,17 @@
 		</nodeHeights>
 	</treeModel>
 
-	<!-- Statistic for sum of the branch lengths of the tree (tree length)       -->
+	<!-- Statistic for sum of the branch lengths of the tree (tree length) -->
 	<treeLengthStatistic id="treeLength">
 		<treeModel idref="treeModel"/>
 	</treeLengthStatistic>
 
-	<!-- Statistic for time of most recent common ancestor of tree               -->
+	<!-- Statistic for time of most recent common ancestor of tree -->
 	<tmrcaStatistic id="age(root)" absolute="true">
 		<treeModel idref="treeModel"/>
 	</tmrcaStatistic>
-	
 
-	<!-- Taxon Sets                                                              -->
+	<!-- Taxon Sets -->
 	{% for group in groups %}
 	<tmrcaStatistic id="tmrca({{ group }})" absolute="false" includeStem="false">
 		<mrca>
@@ -121,7 +115,7 @@
 	</monophylyStatistic>
 	{% endfor %}
 
-	<!-- Generate a coalescent likelihood                                        -->
+	<!-- Generate a coalescent likelihood -->
 	<coalescentLikelihood id="coalescent">
 		<model>
 			<exponentialGrowth idref="exponential"/>
@@ -131,72 +125,93 @@
 		</populationTree>
 	</coalescentLikelihood>
 
-
+	{% macro branchRatesRef(partition) %}
 	{% if clock == 'strict' %}
-	<!-- The strict clock (Uniform rates across branches)                        -->
-	<strictClockBranchRates id="branchRates">
+	<strictClockBranchRates idref="branchRates.{{ partition.prefix }}"/>
+	{% elif clock == 'relaxed' %}
+	<discretizedBranchRates idref="branchRates.{{ partition.prefix }}"/>
+	{% elif 'flc' in clock %}
+	<localClockModel idref="branchRates.{{ partition.prefix }}"/>
+	{% endif %}
+	{% endmacro %}
+
+	{% for partition in partitions %}
+	{% if clock == 'strict' %}
+	<strictClockBranchRates id="branchRates.{{ partition.prefix }}">
 		<rate>
-			<parameter id="clock.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.clock.rate" value="1.0" lower="0.0"/>
 		</rate>
 	</strictClockBranchRates>
 	{% elif clock == 'relaxed' %}
-	<!-- The uncorrelated relaxed clock (Drummond, Ho, Phillips & Rambaut (2006) PLoS Biology 4, e88 )-->
-	<discretizedBranchRates id="branchRates">
+	<discretizedBranchRates id="branchRates.{{ partition.prefix }}">
 		<treeModel idref="treeModel"/>
 		<distribution>
 			<gammaDistributionModel>
 				<mean>
-					<parameter id="ucgd.mean" value="1.0" lower="0.0"/>
+					<parameter id="{{ partition.prefix }}.ucgd.mean" value="1.0" lower="0.0"/>
 				</mean>
 				<shape>
-					<parameter id="ucgd.shape" value="0.3333333333333333" lower="0.0"/>
+					<parameter id="{{ partition.prefix }}.ucgd.shape" value="0.3333333333333333" lower="0.0"/>
 				</shape>
 			</gammaDistributionModel>
 		</distribution>
 		<rateCategories>
-			<parameter id="branchRates.categories"/>
+			<parameter id="branchRates.{{ partition.prefix }}.categories"/>
 		</rateCategories>
 	</discretizedBranchRates>
-	{% elif 'flc' in clock %} {# Here are the FLC models #}
-	<!-- The a priori local clock model (Yoder & Yang, 2000)                     -->
-	<localClockModel id="branchRates">
+	{% elif 'flc' in clock %}
+	<localClockModel id="branchRates.{{ partition.prefix }}">
 		<treeModel idref="treeModel"/>
 		<rate>
-			<parameter id="clock.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.clock.rate" value="1.0" lower="0.0"/>
 		</rate>
 		{% for group in groups %}
 		{% if  clock == 'flc-stem' %}
 		<clade includeStem="true" excludeClade="true">
-			<parameter id="{{ group }}.stem.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.{{ group }}.stem.rate" value="1.0" lower="0.0"/>
 			<taxa idref="{{ group }}"/>
 		</clade>
 		{% elif clock == 'flc-shared-stem' %}
 		<clade includeStem="true" excludeClade="true">
 			{% if loop.first %}
-			<parameter id="stem.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.stem.rate" value="1.0" lower="0.0"/>
 			{% else %}
-			<rate idref="stem.rate"/>
+			<rate idref="{{ partition.prefix }}.stem.rate"/>
 			{% endif %}
 			<taxa idref="{{ group }}"/>
 		</clade>
 		{% elif clock == 'flc-clade' %}
 		<clade includeStem="false" excludeClade="false">
-			<parameter id="{{ group }}.clade.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.{{ group }}.clade.rate" value="1.0" lower="0.0"/>
 			<taxa idref="{{ group }}"/>
 		</clade>
 		{% elif clock == 'flc-shared-clade' %}
 		<clade includeStem="false" excludeClade="false">
 			{% if loop.first %}
-			<parameter id="clade.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.clade.rate" value="1.0" lower="0.0"/>
 			{% else %}
-			<rate idref="clade.rate"/>
+			<rate idref="{{ partition.prefix }}.clade.rate"/>
+			{% endif %}
+			<taxa idref="{{ group }}"/>
+		</clade>
+		{% elif clock == 'flc-stem-and-clade' %}
+		<clade includeStem="true" excludeClade="false">
+			<parameter id="{{ partition.prefix }}.{{ group }}.stem_and_clade.rate" value="1.0" lower="0.0"/>
+			<taxa idref="{{ group }}"/>
+		</clade>
+		{% elif clock == 'flc-shared-stem-and-clade' %}
+		<clade includeStem="true" excludeClade="false">
+			{% if loop.first %}
+			<parameter id="{{ partition.prefix }}.stem_and_clade.rate" value="1.0" lower="0.0"/>
+			{% else %}
+			<rate idref="{{ partition.prefix }}.stem_and_clade.rate"/>
 			{% endif %}
 			<taxa idref="{{ group }}"/>
 		</clade>
 		{% endif %}
 		{% endfor %}
 		<externalBranches>
-			<parameter idref="clock.rate"/>
+			<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			{% for group in groups %}
 			<taxa idref="{{ group }}"/>
 			{% endfor %}
@@ -204,142 +219,137 @@
 	</localClockModel>
 	{% endif %}
 
-	{% macro branchRatesRef() %}
-	{% if clock == 'strict' %}
-	<strictClockBranchRates idref="branchRates"/>
-	{% elif clock == 'relaxed' %}
-	<discretizedBranchRates idref="branchRates"/>
-	{% elif 'flc' in clock %}
-	<localClockModel idref="branchRates"/>
-	{% endif %}
-	{% endmacro %}
-	
-	<rateStatistic id="meanRate" name="meanRate" mode="mean" internal="true" external="true">
+	<rateStatistic id="{{ partition.prefix }}.meanRate" name="{{ partition.prefix }}.meanRate" mode="mean" internal="true" external="true">
 		<treeModel idref="treeModel"/>
-		{{ branchRatesRef() }}
+		{{ branchRatesRef(partition) }}
 	</rateStatistic>
-	
-	<rateStatistic id="coefficientOfVariation" name="coefficientOfVariation" mode="coefficientOfVariation" internal="true" external="true">
-		<treeModel idref="treeModel"/>
-		{{ branchRatesRef() }}
-	</rateStatistic>
-	
-	<rateCovarianceStatistic id="covariance" name="covariance">
-		<treeModel idref="treeModel"/>
-		{{ branchRatesRef() }}
-	</rateCovarianceStatistic>
-	
 
-	<!-- The general time reversible (GTR) substitution model                    -->
-	<gtrModel id="gtr">
+	<rateStatistic id="{{ partition.prefix }}.coefficientOfVariation" name="{{ partition.prefix }}.coefficientOfVariation" mode="coefficientOfVariation" internal="true" external="true">
+		<treeModel idref="treeModel"/>
+		{{ branchRatesRef(partition) }}
+	</rateStatistic>
+
+	<rateCovarianceStatistic id="{{ partition.prefix }}.covariance" name="{{ partition.prefix }}.covariance">
+		<treeModel idref="treeModel"/>
+		{{ branchRatesRef(partition) }}
+	</rateCovarianceStatistic>
+
+	<gtrModel id="gtr.{{ partition.prefix }}">
 		<frequencies>
 			<frequencyModel dataType="nucleotide">
-				<alignment idref="alignment"/>
+				<alignment idref="alignment.{{ partition.prefix }}"/>
 				<frequencies>
-					<parameter id="frequencies" dimension="4"/>
+					<parameter id="{{ partition.prefix }}.frequencies" dimension="4"/>
 				</frequencies>
 			</frequencyModel>
 		</frequencies>
 		<rates>
-			<parameter id="gtr.rates" dimension="6" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.gtr.rates" dimension="6" value="1.0" lower="0.0"/>
 		</rates>
 	</gtrModel>
 
-	<!-- site model                                                              -->
-	<siteModel id="siteModel">
+	<siteModel id="siteModel.{{ partition.prefix }}">
 		<substitutionModel>
-			<gtrModel idref="gtr"/>
+			<gtrModel idref="gtr.{{ partition.prefix }}"/>
 		</substitutionModel>
+		<relativeRate>
+			<parameter id="{{ partition.prefix }}.mu" value="1.0" lower="0.0"/>
+		</relativeRate>
 		<gammaShape gammaCategories="4">
-			<parameter id="alpha" value="0.5" lower="0.0"/>
+			<parameter id="{{ partition.prefix }}.alpha" value="0.5" lower="0.0"/>
 		</gammaShape>
 	</siteModel>
 
-	<!--                                                                         -->
-	<statistic id="mu" name="mu">
-		<siteModel idref="siteModel"/>
-	</statistic>
-	
-
-	<!-- Likelihood for tree given sequence data                                 -->
-	<treeDataLikelihood id="treeLikelihood" useAmbiguities="false">
+	<treeDataLikelihood id="treeLikelihood.{{ partition.prefix }}" useAmbiguities="false">
 		<partition>
-			<patterns idref="patterns"/>
-			<siteModel idref="siteModel"/>
+			<patterns idref="patterns.{{ partition.prefix }}"/>
+			<siteModel idref="siteModel.{{ partition.prefix }}"/>
 		</partition>
 		<treeModel idref="treeModel"/>
-		{{ branchRatesRef() }}
+		{{ branchRatesRef(partition) }}
 	</treeDataLikelihood>
-	
+	{% endfor %}
 
-	<!-- Define operators                                                        -->
+	<!-- Define operators -->
 	<operators id="operators" optimizationSchedule="default">
+		{% for partition in partitions %}
 		<deltaExchange delta="0.01" weight="1">
-			<parameter idref="gtr.rates"/>
+			<parameter idref="{{ partition.prefix }}.gtr.rates"/>
 		</deltaExchange>
 		<scaleOperator scaleFactor="0.75" weight="1">
-			<parameter idref="alpha"/>
+			<parameter idref="{{ partition.prefix }}.alpha"/>
 		</scaleOperator>
 		{% if clock == 'strict' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="clock.rate"/>
+			<parameter idref="{{ partition.prefix }}.clock.rate"/>
 		</scaleOperator>
 		<upDownOperator scaleFactor="0.75" weight="3">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
 			<down>
-				<parameter idref="clock.rate"/>
+				<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			</down>
 		</upDownOperator>
 		{% endif %}
 		{% if clock == 'relaxed' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="ucgd.mean"/>
+			<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
 		</scaleOperator>
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="ucgd.shape"/>
+			<parameter idref="{{ partition.prefix }}.ucgd.shape"/>
 		</scaleOperator>
 		<upDownOperator scaleFactor="0.75" weight="3">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
 			<down>
-				<parameter idref="ucgd.mean"/>
+				<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
 			</down>
 		</upDownOperator>
 		<swapOperator size="1" weight="10" autoOptimize="false">
-			<parameter idref="branchRates.categories"/>
+			<parameter idref="branchRates.{{ partition.prefix }}.categories"/>
 		</swapOperator>
 		<uniformIntegerOperator weight="10">
-			<parameter idref="branchRates.categories"/>
+			<parameter idref="branchRates.{{ partition.prefix }}.categories"/>
 		</uniformIntegerOperator>
 		{% elif 'flc' in clock %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="clock.rate"/>
+			<parameter idref="{{ partition.prefix }}.clock.rate"/>
 		</scaleOperator>
 		{% if clock == 'flc-stem' %}
 		{% for group in groups %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ group }}.stem.rate"/>
+			<parameter idref="{{ partition.prefix }}.{{ group }}.stem.rate"/>
 		</scaleOperator>
 		{% endfor %}
 		{% elif clock == 'flc-shared-stem' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="stem.rate"/>
+			<parameter idref="{{ partition.prefix }}.stem.rate"/>
 		</scaleOperator>
 		{% elif clock == 'flc-clade' %}
 		{% for group in groups %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ group }}.clade.rate"/>
+			<parameter idref="{{ partition.prefix }}.{{ group }}.clade.rate"/>
 		</scaleOperator>
 		{% endfor %}
 		{% elif clock == 'flc-shared-clade' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="clade.rate"/>
+			<parameter idref="{{ partition.prefix }}.clade.rate"/>
+		</scaleOperator>
+		{% elif clock == 'flc-stem-and-clade' %}
+		{% for group in groups %}
+		<scaleOperator scaleFactor="0.75" weight="3">
+			<parameter idref="{{ partition.prefix }}.{{ group }}.stem_and_clade.rate"/>
+		</scaleOperator>
+		{% endfor %}
+		{% elif clock == 'flc-shared-stem-and-clade' %}
+		<scaleOperator scaleFactor="0.75" weight="3">
+			<parameter idref="{{ partition.prefix }}.stem_and_clade.rate"/>
 		</scaleOperator>
 		{% endif %}
 		{% endif %}
+		{% endfor %}
 		{% if not fixedTree %}
 		<subtreeSlide size="1.0" gaussian="true" weight="30">
 			<treeModel idref="treeModel"/>
@@ -367,9 +377,8 @@
 			<parameter idref="exponential.growthRate"/>
 		</randomWalkOperator>
 	</operators>
-	
 
-	<!-- Define MCMC                                                             -->
+	<!-- Define MCMC -->
 	<mcmc id="mcmc" chainLength="{{ chainLength }}" autoOptimize="true">
 		<joint id="joint">
 			<prior id="prior">
@@ -378,49 +387,62 @@
 					<monophylyStatistic idref="monophyly({{ group }})"/>
 					{% endfor %}
 				</booleanLikelihood>
+				{% for partition in partitions %}
 				<dirichletPrior alpha="1.0" sumsTo="6.0">
-					<parameter idref="gtr.rates"/>
+					<parameter idref="{{ partition.prefix }}.gtr.rates"/>
 				</dirichletPrior>
 				<exponentialPrior mean="0.5" offset="0.0">
-					<parameter idref="alpha"/>
+					<parameter idref="{{ partition.prefix }}.alpha"/>
 				</exponentialPrior>
 				{% if clock == 'strict' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="clock.rate"/>
+					<parameter idref="{{ partition.prefix }}.clock.rate"/>
 				</gammaPrior>
 				{% elif clock == 'relaxed' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="ucgd.mean"/>
+					<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
 				</gammaPrior>
 				<exponentialPrior mean="0.3333333333333333" offset="0.0">
-					<parameter idref="ucgd.shape"/>
+					<parameter idref="{{ partition.prefix }}.ucgd.shape"/>
 				</exponentialPrior>
 				{% elif 'flc' in clock %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="clock.rate"/>
+					<parameter idref="{{ partition.prefix }}.clock.rate"/>
 				</gammaPrior>
 				{% if clock == 'flc-stem' %}
 				{% for group in groups %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ group }}.stem.rate"/>
+					<parameter idref="{{ partition.prefix }}.{{ group }}.stem.rate"/>
 				</gammaPrior>
 				{% endfor %}
 				{% elif clock == 'flc-shared-stem' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="stem.rate"/>
+					<parameter idref="{{ partition.prefix }}.stem.rate"/>
 				</gammaPrior>
 				{% elif clock == 'flc-clade' %}
 				{% for group in groups %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ group }}.clade.rate"/>
+					<parameter idref="{{ partition.prefix }}.{{ group }}.clade.rate"/>
 				</gammaPrior>
 				{% endfor %}
 				{% elif clock == 'flc-shared-clade' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="clade.rate"/>
+					<parameter idref="{{ partition.prefix }}.clade.rate"/>
+				</gammaPrior>
+				{% elif clock == 'flc-stem-and-clade' %}
+				{% for group in groups %}
+				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
+					<parameter idref="{{ partition.prefix }}.{{ group }}.stem_and_clade.rate"/>
+				</gammaPrior>
+				{% endfor %}
+				{% elif clock == 'flc-shared-stem-and-clade' %}
+				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
+					<parameter idref="{{ partition.prefix }}.stem_and_clade.rate"/>
 				</gammaPrior>
 				{% endif %}
 				{% endif %}
+				{{ branchRatesRef(partition) }}
+				{% endfor %}
 				<exponentialPrior mean="100.0" offset="0.0">
 					<parameter idref="exponential.popSize"/>
 				</exponentialPrior>
@@ -428,16 +450,16 @@
 					<parameter idref="exponential.growthRate"/>
 				</laplacePrior>
 				<coalescentLikelihood idref="coalescent"/>
-				
-				{{ branchRatesRef() }}
 			</prior>
 			<likelihood id="likelihood">
-				<treeDataLikelihood idref="treeLikelihood"/>
+				{% for partition in partitions %}
+				<treeDataLikelihood idref="treeLikelihood.{{ partition.prefix }}"/>
+				{% endfor %}
 			</likelihood>
 		</joint>
 		<operators idref="operators"/>
 
-		<!-- write log to screen                                                     -->
+		<!-- write log to screen -->
 		<log id="screenLog" logEvery="{{ screenLogEvery }}">
 			<column label="Joint" dp="4" width="12">
 				<joint idref="joint"/>
@@ -451,23 +473,24 @@
 			<column label="age(root)" sf="6" width="12">
 				<tmrcaStatistic idref="age(root)"/>
 			</column>
+			{% for partition in partitions %}
 			{% if clock == 'strict' %}
-			<column label="clock.rate" sf="6" width="12">
-				<parameter idref="clock.rate"/>
+			<column label="{{ partition.prefix }}.clock.rate" sf="6" width="16">
+				<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			</column>
 			{% elif clock == 'relaxed' %}
-			<column label="ucgd.mean" sf="6" width="12">
-				<parameter idref="ucgd.mean"/>
+			<column label="{{ partition.prefix }}.ucgd.mean" sf="6" width="16">
+				<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
 			</column>
 			{% elif 'flc' in clock %}
-			<column label="clock.rate" sf="6" width="12">
-				<parameter idref="clock.rate"/>
+			<column label="{{ partition.prefix }}.clock.rate" sf="6" width="16">
+				<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			</column>
 			{% endif %}
+			{% endfor %}
 		</log>
 
 		{% if traceLog %}
-		<!-- write log to file                                                       -->
 		<log id="fileLog" logEvery="{{ traceLog.log_every }}" fileName="{{ traceLog.file_name }}" overwrite="false">
 			<joint idref="joint"/>
 			<prior idref="prior"/>
@@ -481,56 +504,62 @@
 			{% endfor %}
 			<parameter idref="exponential.popSize"/>
 			<parameter idref="exponential.growthRate"/>
-			<parameter idref="gtr.rates"/>
-			<parameter idref="alpha"/>
+			{% for partition in partitions %}
+			<parameter idref="{{ partition.prefix }}.gtr.rates"/>
+			<parameter idref="{{ partition.prefix }}.alpha"/>
 			{% if clock == 'strict' %}
-			<parameter idref="clock.rate"/>
+			<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			{% elif clock == 'relaxed' %}
-			<parameter idref="ucgd.mean"/>
-			<parameter idref="ucgd.shape"/>
+			<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
+			<parameter idref="{{ partition.prefix }}.ucgd.shape"/>
 			{% elif 'flc' in clock %}
-			<parameter idref="clock.rate"/>
+			<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			{% if clock == 'flc-stem' %}
 			{% for group in groups %}
-			<parameter idref="{{ group }}.stem.rate"/>
+			<parameter idref="{{ partition.prefix }}.{{ group }}.stem.rate"/>
 			{% endfor %}
 			{% elif clock == 'flc-shared-stem' %}
-			<parameter idref="stem.rate"/>
+			<parameter idref="{{ partition.prefix }}.stem.rate"/>
 			{% elif clock == 'flc-clade' %}
 			{% for group in groups %}
-			<parameter idref="{{ group }}.clade.rate"/>
+			<parameter idref="{{ partition.prefix }}.{{ group }}.clade.rate"/>
 			{% endfor %}
 			{% elif clock == 'flc-shared-clade' %}
-			<parameter idref="clade.rate"/>
+			<parameter idref="{{ partition.prefix }}.clade.rate"/>
+			{% elif clock == 'flc-stem-and-clade' %}
+			{% for group in groups %}
+			<parameter idref="{{ partition.prefix }}.{{ group }}.stem_and_clade.rate"/>
+			{% endfor %}
+			{% elif clock == 'flc-shared-stem-and-clade' %}
+			<parameter idref="{{ partition.prefix }}.stem_and_clade.rate"/>
 			{% endif %}
 			{% endif %}
-			<rateStatistic idref="meanRate"/>
-			<rateStatistic idref="coefficientOfVariation"/>
+			<rateStatistic idref="{{ partition.prefix }}.meanRate"/>
+			<rateStatistic idref="{{ partition.prefix }}.coefficientOfVariation"/>
 			{% if clock == 'relaxed' -%}
-			<rateCovarianceStatistic idref="covariance"/>
+			<rateCovarianceStatistic idref="{{ partition.prefix }}.covariance"/>
 			{%- endif %}
-			<treeDataLikelihood idref="treeLikelihood"/>
-			{{ branchRatesRef() }}
+			<treeDataLikelihood idref="treeLikelihood.{{ partition.prefix }}"/>
+			{{ branchRatesRef(partition) }}
+			{% endfor %}
 			<coalescentLikelihood idref="coalescent"/>
 		</log>
 		{% endif %}
 
 		{% if treeLog %}
-		<!-- write tree log to file                                                  -->
 		<logTree id="treeFileLog" logEvery="{{ treeLog.log_every }}" nexusFormat="true" fileName="{{ treeLog.file_name }}" sortTranslationTable="true">
 			<treeModel idref="treeModel"/>
-			<trait name="rate" tag="rate">
-				{{ branchRatesRef() }}
+			{% for partition in partitions %}
+			<trait name="rate" tag="{{ 'rate' if loop.first else partition.prefix ~ '.rate' }}">
+				{{ branchRatesRef(partition) }}
 			</trait>
+			{% endfor %}
 			<joint idref="joint"/>
 		</logTree>
 		{% endif %}
 	</mcmc>
-	
-	{% if marginalLikelihoodEstimator %}
-	<!-- START Marginal Likelihood Estimator                                     -->
 
-	<!-- Define marginal likelihood estimator (PS/SS) settings                   -->
+	{% if marginalLikelihoodEstimator %}
 	<marginalLikelihoodEstimator chainLength="{{ marginalLikelihoodEstimator.chain_length }}" pathSteps="{{ marginalLikelihoodEstimator.path_steps }}" pathScheme="betaquantile" alpha="0.3">
 		<samplers>
 			<mcmc idref="mcmc"/>
@@ -548,19 +577,15 @@
 		</log>
 	</marginalLikelihoodEstimator>
 
-	<!-- Path sampling estimator from collected samples                          -->
 	<pathSamplingAnalysis fileName="{{ marginalLikelihoodEstimator.file_name }}" resultsFileName="{{ marginalLikelihoodEstimator.results_file_name }}">
 		<likelihoodColumn name="pathLikelihood.delta"/>
 		<thetaColumn name="pathLikelihood.theta"/>
 	</pathSamplingAnalysis>
 
-	<!-- Stepping-stone sampling estimator from collected samples                -->
 	<steppingStoneSamplingAnalysis fileName="{{ marginalLikelihoodEstimator.file_name }}" resultsFileName="{{ marginalLikelihoodEstimator.results_file_name }}">
 		<likelihoodColumn name="pathLikelihood.delta"/>
 		<thetaColumn name="pathLikelihood.theta"/>
 	</steppingStoneSamplingAnalysis>
-
-	<!-- END Marginal Likelihood Estimator                                       -->
 	{% endif %}
 
 	<report>
@@ -568,5 +593,5 @@
 			<mcmc idref="mcmc"/>
 		</property>
 	</report>
-	
+
 </beast>

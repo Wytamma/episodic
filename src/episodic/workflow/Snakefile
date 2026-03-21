@@ -4,6 +4,9 @@ from scripts.populate_beast_template import taxa_from_fasta
 if config["alignment"] is None or not config["group"]:
     raise ValueError("Must specify alignment and group")
 
+if type(config["alignment"]) != list:
+    config["alignment"] = [config["alignment"]]
+
 if type(config["group"]) != list:
     # group must be list
     config["group"] = [config["group"]]
@@ -32,7 +35,7 @@ rate_gamma_prior_shape=config["rate_gamma_prior_shape"]
 clocks = expand("{clock}_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}", clock=config["clock"], rate_gamma_prior_shape=rate_gamma_prior_shape, rate_gamma_prior_scale=rate_gamma_prior_scale)
 flc_clocks = [c for c in clocks if "flc" in c]
 relaxed_clocks = [c for c in clocks if "relaxed" in c]
-alignment_path=config["alignment"]
+alignment_paths=config["alignment"]
 date_delimiter=config["date_delimiter"]
 date_index=config["date_index"]
 
@@ -43,7 +46,7 @@ ALL_LOG_FILES = expand(CLOCK_DIR / "{clock}" / "{clock}_{duplicate}" / "{clock}_
 PER_CLOCK_LOG_FILES = lambda wildcards: [CLOCK_DIR / wildcards.clock / f"{wildcards.clock}_{duplicate}" / f"{wildcards.clock}_{duplicate}.log" for duplicate in duplicates]
 
 TAXA = taxa_from_fasta(
-    alignment_path,
+    alignment_paths[0],
     date_delimiter=date_delimiter,
     date_index=date_index,
 )

@@ -1,11 +1,12 @@
 
 rule create_beast_xml:
     input:
-        alignment = config["alignment"],
+        alignments = config["alignment"],
     output:
         beast_XML_file = CLOCK_DIR / "{clock}" / "{name}" / "{name}.xml",
     params:
         template = beast_xml_template,
+        alignments = lambda wildcards, input: " ".join(f"--alignment {alignment}" for alignment in input.alignments),
         date_delimiter = "\|" if config.get("date_delimiter") == "|" else config.get("date_delimiter"),
         date_index = config.get("date_index", -1),
         groups = " ".join(config.get("group")),
@@ -26,7 +27,7 @@ rule create_beast_xml:
         python {SCRIPT_DIR}/populate_beast_template.py \
             {params.template} \
             --output {output.beast_XML_file} \
-            --alignment {input.alignment} \
+            {params.alignments} \
             --date-delimiter {params.date_delimiter} \
             --date-index {params.date_index} \
             --groups {params.groups} \

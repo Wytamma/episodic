@@ -1,5 +1,5 @@
-from math import log
 from pathlib import Path
+import re
 from typing import List
 
 import numpy as np
@@ -80,8 +80,25 @@ def calculate_odds(
 
     df = pd.concat(dfs)
 
-    # Identify columns that end with .rate and are not 'clock.rate'
-    rate_columns = [col for col in df.columns if col.endswith(".rate") and col != "clock.rate"]
+    # Identify local clock rate columns and compare them to the matching
+    # partition background rate. For backward compatibility, unpartitioned
+    # analyses still use `clock.rate`.
+    background_pattern = re.compile(r"^(?P<prefix>.+)\.clock\.rate$")
+    partition_backgrounds = {
+        match.group("prefix"): column
+        for column in df.columns
+        for match in [background_pattern.match(column)]
+        if match
+    }
+    default_background = "clock.rate" if "clock.rate" in df.columns else None
+
+    rate_columns = []
+    for col in df.columns:
+        if not col.endswith(".rate"):
+            continue
+        if col == default_background or col.endswith(".clock.rate"):
+            continue
+        rate_columns.append(col)
 
     # Generate gamma-distributed random variables for p_fg and p_bg
     n_samples = len(df)
@@ -98,7 +115,20 @@ def calculate_odds(
     # Calculate the odds for each .rate column compared to df['clock.rate']
     for rate_column in rate_columns:
         pos_fg = df[rate_column]
-        pos_bg = df["clock.rate"]
+
+        background_column = default_background
+        for partition_prefix, candidate_background in sorted(
+            partition_backgrounds.items(), key=lambda item: len(item[0]), reverse=True
+        ):
+            if rate_column.startswith(f"{partition_prefix}."):
+                background_column = candidate_background
+                break
+
+        if background_column is None:
+            raise ValueError(
+                f"Could not find a background clock rate column for '{rate_column}'."
+            )
+        pos_bg = df[background_column]
 
         # Calculate the posterior odds (pos_odds)
         pos_p = np.mean(pos_fg > pos_bg)
@@ -111,6 +141,7 @@ def calculate_odds(
         results.append(
             {
                 "Rate Column": rate_column,
+                "Background Column": background_column,
                 "p_p": p_p,
                 "p_odds": p_odds,
                 "pos_p": pos_p,

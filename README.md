@@ -44,6 +44,15 @@ pip install episodic
 
 ![](docs/images/run_cli.png)
 
+Multiple alignment partitions can be supplied by repeating `--alignment`.
+
+```console
+episodic run \
+    --alignment partition1.fasta \
+    --alignment partition2.fasta \
+    --group BA.2.86
+```
+
 ## Outputs
 Episodic will produce a range on log files, trees and plots. The following is a list of the main outputs.
 
