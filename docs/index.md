@@ -24,9 +24,23 @@ Given a multiple sequence alignment and a list of groups to test for episodic ev
 - Compute and plot Bayes factors for the marginal likelihood analyses.
 - Produce maximum clade credibility (MCC) trees for each clock model.
 - Compute bayes factor on effect size for the FLC models (foreground vs background).
-- Run rank and quantile tests on the all the models.
+- Run rank and quantile tests on relaxed clock models.
 - Handel the execution of the pipeline on a HPC cluster via snakemake profiles.
 - Produce a report of the results (TBD).
+
+## Outputs
+
+Episodic writes results to `output.dir` (optionally timestamped when `output.dated: true`).
+
+For the complete output file reference (including optional branches and side-effect plots), see:
+
+- [Workflow Outputs](workflow.md)
+
+## Guides
+
+Reproducible walkthroughs for previously published studies are documented in:
+
+- [Guides](guides/index.md)
 
 ## Features
 

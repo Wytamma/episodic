@@ -18,6 +18,15 @@ The pipeline can be run using the `episodic` command line interface.
 episodic run --fasta tests/data/.yaml
 ```
 
+## Where outputs are written
+
+By default, results are written to `output.dir` from your config.
+If `output.dated: true`, a timestamped subdirectory is created under that directory.
+
+For a full list of output files and naming patterns, see:
+
+- [Workflow Outputs](workflow.md)
+
 
 ## Confuguration
 
