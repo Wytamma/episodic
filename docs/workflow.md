@@ -43,11 +43,19 @@ For each `{clock}` and `{duplicate}`:
 
 ## Per-clock summaries and rate plots
 
+Per-clock rate/comparison plots are generated for `flc*` clocks. Combined `clocks_{shape}_{scale}-*` plots aggregate all configured clocks.
+
 | File pattern | Description |
 |---|---|
 | `OUT_DIR/clocks/{clock}/{clock}-summary.csv` | ArviZ posterior summary table |
 | `OUT_DIR/clocks/{clock}/{clock}-violin.svg` | Clock-rate violin plot |
+| `OUT_DIR/clocks/{clock}/{clock}-forest.svg` | Forest plot of posterior medians and 95% HDIs for rate parameters |
+| `OUT_DIR/clocks/{clock}/{clock}-prior-vs-posterior.svg` | Prior-versus-posterior density overlays for rate parameters |
+| `OUT_DIR/clocks/{clock}/{clock}-contrast-violin.svg` | Violin plot of posterior rate differences relative to a baseline rate |
 | `OUT_DIR/clocks/clocks_{shape}_{scale}-violin.svg` | Combined violin plot across clocks |
+| `OUT_DIR/clocks/clocks_{shape}_{scale}-forest.svg` | Combined forest comparison across clocks |
+| `OUT_DIR/clocks/clocks_{shape}_{scale}-prior-vs-posterior.svg` | Combined prior-versus-posterior density overlays across clocks |
+| `OUT_DIR/clocks/clocks_{shape}_{scale}-contrast-violin.svg` | Combined posterior rate-difference violin plot across clocks |
 | `OUT_DIR/clocks/clocks_{shape}_{scale}-trace.svg` | Combined trace plot across clocks |
 
 ### Additional side-effect files from rate plotting scripts

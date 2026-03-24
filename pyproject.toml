@@ -49,6 +49,8 @@ path = "src/episodic/__about__.py"
 dependencies = [
   "coverage[toml]>=6.5",
   "pytest",
+  "mkdocs==1.5.3",
+  "mkdocs-autorefs==0.4.1",
   "mkdocstrings==0.22.0",
   "mkdocstrings-python==1.3.*",
   "mkdocs-material"

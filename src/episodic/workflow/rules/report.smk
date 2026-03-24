@@ -53,7 +53,10 @@ rule plot_flc_rates:
     input:
         lambda wildcards: [CLOCK_DIR / wildcards.clock / f"{wildcards.clock}_{duplicate}" / f"{wildcards.clock}_{duplicate}.log" for duplicate in duplicates if "flc" in wildcards.clock],
     output:
-        rate_svg=CLOCK_DIR / "{clock}" / "{clock}-violin.svg" 
+        rate_svg=CLOCK_DIR / "{clock}" / "{clock}-violin.svg",
+        forest_svg=CLOCK_DIR / "{clock}" / "{clock}-forest.svg",
+        prior_posterior_svg=CLOCK_DIR / "{clock}" / "{clock}-prior-vs-posterior.svg",
+        contrast_svg=CLOCK_DIR / "{clock}" / "{clock}-contrast-violin.svg",
     params:
         output_prefix=lambda wildcards: CLOCK_DIR / f"{wildcards.clock}" / f"{wildcards.clock}",
         gamma_shape=rate_gamma_prior_shape,
@@ -63,6 +66,7 @@ rule plot_flc_rates:
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/arviz_output.py rates {input} --output-prefix {params.output_prefix} --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
+        ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/arviz_output.py compare {input} --output-prefix {params.output_prefix} --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
         """
 
 use rule plot_flc_rates as plot_rates with:
@@ -71,6 +75,9 @@ use rule plot_flc_rates as plot_rates with:
     output:
         clocks_violin=CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-violin.svg",
         clocks_trace=CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-trace.svg",
+        clocks_forest=CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-forest.svg",
+        clocks_prior_posterior=CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-prior-vs-posterior.svg",
+        clocks_contrast=CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-contrast-violin.svg",
     params:
         output_prefix=CLOCK_DIR / f"clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}",
         gamma_shape=rate_gamma_prior_shape,
