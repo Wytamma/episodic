@@ -15,7 +15,7 @@ pip install episodic
 The pipeline can be run using the `episodic` command line interface. 
 
 ```console
-episodic run --fasta tests/data/.yaml
+episodic run --alignment data.fasta --group group1 --group group2
 ```
 
 ## Where outputs are written
