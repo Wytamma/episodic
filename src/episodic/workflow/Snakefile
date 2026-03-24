@@ -1,5 +1,22 @@
 from utils import decimal_year_to_date
 from scripts.populate_beast_template import taxa_from_fasta
+from snk_cli import validate_config
+
+def normalize_bool_strings(value):
+    if isinstance(value, dict):
+        return {key: normalize_bool_strings(val) for key, val in value.items()}
+    if isinstance(value, list):
+        return [normalize_bool_strings(item) for item in value]
+    if isinstance(value, str):
+        lowered = value.strip().lower()
+        if lowered == "true":
+            return True
+        if lowered == "false":
+            return False
+    return value
+
+config = normalize_bool_strings(config)
+validate_config(config, Path(workflow.basedir).parent / "snk.yaml")
 
 if config["alignment"] is None:
     raise ValueError("Must specify alignment")
