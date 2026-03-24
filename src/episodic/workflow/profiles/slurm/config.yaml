@@ -26,12 +26,8 @@ cluster-cancel: scancel
 set-resources:
   - run_beast:mem_mb=4G
   - run_beast:runtime=10080
-  - run_beast:gres=gpu:1
-  - run_beast:partition=gpu-a100
-  - run_beast_mle:mem_mb=4G
-  - run_beast_mle:runtime=10080
-  - run_beast_mle:gres=gpu:1
-  - run_beast_mle:partition=gpu-a100
+  - run_mle_beast:mem_mb=4G
+  - run_mle_beast:runtime=10080
   
 # For some reasons time needs quotes to be read by snakemake
 default-resources:
