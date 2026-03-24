@@ -113,8 +113,7 @@ def density_xy(values: np.ndarray, bins: int = 100) -> tuple[np.ndarray, np.ndar
 
 def wrap_label(label: str, width: int = 28) -> str:
     """Wrap long parameter labels to reduce overlap in plots."""
-    label = label.replace(".", " ")
-    return textwrap.fill(label, width=width, break_long_words=False, break_on_hyphens=False)
+    return textwrap.fill(label, width=width, break_long_words=True, break_on_hyphens=True)
 
 
 def wrapped_label_map(labels: List[str], width: int = 28) -> dict[str, str]:
