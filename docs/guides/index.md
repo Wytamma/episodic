@@ -24,3 +24,4 @@ Use these guides as practical templates for applying Episodic to your own datase
 ## Available guides
 
 - [Tay et al. (2023)](tay-2023.md)
+- [H1N1 partitioned strict-clock analysis](H1N1.md)
