@@ -1,6 +1,7 @@
 
-site_name: episodic
+site_name: Episodic
 repo_url: https://github.com/wytamma/episodic
+edit_uri: edit/main/docs/
 
 theme:
   name: "material"
