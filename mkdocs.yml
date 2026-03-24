@@ -4,9 +4,9 @@ repo_url: https://github.com/wytamma/episodic
 
 theme:
   name: "material"
-  # homepage: https://write-the.wytamma.com
-  logo: assets/logo.png
-  # favicon: images/favicon.png
+  homepage: https://episodic.wytamma.com
+  logo: images/logo.png
+  favicon: images/favicon.ico
   palette: 
     - scheme: default
       toggle:
