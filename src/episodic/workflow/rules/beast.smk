@@ -59,9 +59,11 @@ rule run_beast:
         *config["beast"].get("envmodules", []),
     conda:
         "../envs/beast.yml"
+    params:
+        beast_args = config["beast"].get("args", ""),
     shell:
         """
-        beast -working -overwrite -beagle_GPU -threads {threads} {input.beast_XML_file} > {output.beast_stdout_file}
+        beast -working -overwrite {params.beast_args} -threads {threads} {input.beast_XML_file} > {output.beast_stdout_file}
         """
 
 MLE_OUT_DIR = OUT_DIR / "mle" / "{clock}"

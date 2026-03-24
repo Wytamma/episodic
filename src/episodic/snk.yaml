@@ -95,6 +95,11 @@ annotations:
       help: "Max number of threads to use for BEAST."
       required: false
       default: 4
+    args:
+      type: str
+      help: "Additional command-line arguments to pass to BEAST."
+      required: false
+      default: "-beagle -beagle_SSE -beagle_CPU"
     envmodules:
       type: List[str]
       help: "List of environment modules to load for beast."
