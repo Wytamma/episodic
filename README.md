@@ -67,7 +67,7 @@ Main output categories include:
 - **BEAST trees** - `episodic` will produce a BEAST tree file for each clock model.
 - **MCC trees** - `episodic` will produce a MCC tree for each clock model.
 - **MCC tree plots** - `episodic` will produce a MCC tree plot for each clock model.
-![](docs/images/mcc.mean.svg)
+![](docs/images/flc-shared-stem_0.5_0.1_1.mcc.mean.svg)
 - **Marginal likelihoods** - `episodic` will produce a marginal likelihood plot for each clock model.
 ![](docs/images/mle.svg)
 - **Bayes factors on effect size** - `episodic` will calculate a Bayes factors on effect size for each local clock model. 
