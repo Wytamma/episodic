@@ -7,6 +7,7 @@ dependencies:
   - pip
   - pip:
     - pandas
+    - numpy
     - seaborn
     - matplotlib
     - typer

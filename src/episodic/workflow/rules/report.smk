@@ -23,7 +23,7 @@ rule plot_traces:
     output:
         directory(CLOCK_DIR / "{clock}" / "{name}" / "{name}_trace_plots/"),
     conda:
-        "../envs/plot_traces.yml"
+        "../envs/python.yml"
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/plot_traces.py {input} {output}
@@ -94,4 +94,28 @@ rule calculate_odds:
         do
             ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/calculate_odds.py $file ${{file%.log}}-odds.csv --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
         done
+        """
+
+
+rule plot_partition_local_rate_posteriors:
+    """
+    Plots posterior densities of per-partition background vs local rates.
+    """
+    input:
+        lambda wildcards: [
+            CLOCK_DIR / wildcards.clock / f"{wildcards.clock}_{duplicate}" / f"{wildcards.clock}_{duplicate}.log"
+            for duplicate in duplicates
+            if "flc" in wildcards.clock
+        ],
+    output:
+        svg=CLOCK_DIR / "{clock}" / "{clock}-partition_local_rate_posteriors.svg",
+        csv=CLOCK_DIR / "{clock}" / "{clock}-partition_local_rate_posteriors.csv",
+    conda:
+        "../envs/python.yml"
+    shell:
+        """
+        ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/plot_partition_local_rate_posteriors.py \
+          {input} \
+          {output.svg} \
+          {output.csv}
         """
