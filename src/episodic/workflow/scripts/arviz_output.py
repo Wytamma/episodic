@@ -1,7 +1,8 @@
 from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
-from typing import List
+import textwrap
+from typing import List, Optional
 
 import arviz as az
 import bokeh.io.showing
@@ -98,6 +99,42 @@ def load_log_files(logs: List[Path], burnin: float = 0.1) -> pd.DataFrame:
     return df
 
 
+def rate_columns(df: pd.DataFrame) -> List[str]:
+    """Return rate-like columns from a loaded trace dataframe."""
+    return [c for c in df.columns if c.endswith(".rate") or c.endswith(".ucgd.mean")]
+
+
+def density_xy(values: np.ndarray, bins: int = 100) -> tuple[np.ndarray, np.ndarray]:
+    """Compute density x/y coordinates from histogram bins."""
+    hist, edges = np.histogram(values, bins=bins, density=True)
+    centers = (edges[:-1] + edges[1:]) / 2
+    return centers, hist
+
+
+def wrap_label(label: str, width: int = 28) -> str:
+    """Wrap long parameter labels to reduce overlap in plots."""
+    label = label.replace(".", " ")
+    return textwrap.fill(label, width=width, break_long_words=False, break_on_hyphens=False)
+
+
+def wrapped_label_map(labels: List[str], width: int = 28) -> dict[str, str]:
+    """Build a wrapped display-name mapping while preserving uniqueness."""
+    mapping = {}
+    used = set()
+    for original in labels:
+        candidate = wrap_label(original, width=width)
+        if candidate in used:
+            idx = 2
+            alt = f"{candidate}\n({idx})"
+            while alt in used:
+                idx += 1
+                alt = f"{candidate}\n({idx})"
+            candidate = alt
+        mapping[original] = candidate
+        used.add(candidate)
+    return mapping
+
+
 @app.command()
 def rates(
     logs: List[Path] = typer.Argument(..., help="BEAST log files"),
@@ -122,13 +159,15 @@ def rates(
     df = load_log_files(logs, burnin=burnin)
 
     # extract the rate columns
-    var_names = [c for c in df.columns if c.endswith(".rate") or c.endswith(".ucgd.mean")]
+    var_names = rate_columns(df)
     df = df[var_names]
+    display_map = wrapped_label_map(var_names)
+    df = df.rename(columns=display_map)
 
 
     # add a prior rate column
     prior_rate = np.random.gamma(gamma_shape, gamma_scale, len(df))
-    df["prior.rate"] = prior_rate
+    df["Prior"] = prior_rate
 
     # convert to xarray
     xdata = xr.Dataset.from_dataframe(df)
@@ -148,7 +187,7 @@ def rates(
         )
         plt.savefig(f"{output_prefix}-{rug_str}.svg")
 
-        selected_columns = df.columns[~df.columns.isin(["prior.rate", "draw", "chain"])]
+        selected_columns = df.columns[~df.columns.isin(["Prior", "draw", "chain"])]
 
         for ax in axs.flatten():
             ymax = df[selected_columns].max().max() + df[selected_columns].min().std()
@@ -170,6 +209,106 @@ def rates(
         # hack to save the html file without opening it in the browser
         # must set show=True to save the file
         az.plot_trace(dataset, backend="bokeh", show=True)
+
+@app.command()
+def compare(
+    logs: List[Path] = typer.Argument(..., help="BEAST log files"),
+    output_prefix: Path = typer.Option(..., help="Prefix for output files"),
+    gamma_shape: float = typer.Option(..., help="Shape parameter for the gamma prior"),
+    gamma_scale: float = typer.Option(..., help="Scale parameter for the gamma prior"),
+    baseline_rate: Optional[str] = typer.Option(
+        None,
+        help="Rate parameter used as baseline for posterior contrasts. Defaults to the first detected rate column.",
+    ),
+    burnin: float = typer.Option(0.1, help="Fraction of the chain to discard as burnin"),
+):
+    """Generate comparison visualizations for model rate parameters."""
+    df = load_log_files(logs, burnin=burnin)
+    var_names = rate_columns(df)
+    if not var_names:
+        raise typer.BadParameter("No rate columns found in logs.")
+
+    posterior_df = df[var_names]
+    display_map = wrapped_label_map(var_names)
+    display_names = [display_map[name] for name in var_names]
+
+    display_df = posterior_df.rename(columns=display_map)
+    xdata = xr.Dataset.from_dataframe(display_df)
+    dataset = az.InferenceData(posterior=xdata)
+
+    # 1) Forest plot (median and HDI intervals)
+    az.plot_forest(
+        dataset,
+        var_names=display_names,
+        combined=True,
+        hdi_prob=0.95,
+        figsize=(12, max(4, len(var_names) * 0.8)),
+    )
+    plt.tight_layout()
+    plt.savefig(f"{output_prefix}-forest.svg")
+    plt.close()
+
+    # 2) Prior vs posterior density overlays
+    n_rates = len(var_names)
+    fig, axes = plt.subplots(n_rates, 1, figsize=(12, max(4, n_rates * 2.4)), squeeze=False)
+    prior_values = np.random.gamma(gamma_shape, gamma_scale, len(posterior_df))
+
+    for idx, column in enumerate(var_names):
+        ax = axes[idx, 0]
+        posterior_values = posterior_df[column].to_numpy()
+        post_x, post_y = density_xy(posterior_values)
+        prior_x, prior_y = density_xy(prior_values)
+
+        ax.plot(post_x, post_y, label="posterior", linewidth=2)
+        ax.plot(prior_x, prior_y, label="prior", linewidth=1.8, linestyle="--")
+        ax.fill_between(post_x, post_y, alpha=0.2)
+        ax.set_title(display_map[column], fontsize=10)
+        ax.set_ylabel("density")
+        if idx == n_rates - 1:
+            ax.set_xlabel("rate")
+        ax.grid(alpha=0.25)
+        ax.legend(loc="upper right")
+
+    plt.tight_layout()
+    plt.savefig(f"{output_prefix}-prior-vs-posterior.svg")
+    plt.close()
+
+    # 3) Posterior contrasts to baseline
+    baseline = baseline_rate or var_names[0]
+    if baseline not in var_names:
+        raise typer.BadParameter(
+            f"baseline_rate '{baseline}' not found in detected rate columns: {', '.join(var_names)}"
+        )
+
+    contrast_columns = [column for column in var_names if column != baseline]
+    if contrast_columns:
+        contrast_df = pd.DataFrame(
+            {
+                wrap_label(f"{column} - {baseline}", width=32): posterior_df[column] - posterior_df[baseline]
+                for column in contrast_columns
+            },
+            index=posterior_df.index,
+        )
+        contrast_xdata = xr.Dataset.from_dataframe(contrast_df)
+        contrast_dataset = az.InferenceData(posterior=contrast_xdata)
+
+        axs = az.plot_violin(
+            contrast_dataset,
+            figsize=(max(8, len(contrast_df.columns) * 3.5), 8),
+            textsize=14,
+            sharey=True,
+            sharex=False,
+            rug=False,
+            grid=(1, len(contrast_df.columns)),
+        )
+        for ax in np.ravel(np.array(axs)):
+            ax.axhline(0, color="black", linewidth=1, linestyle="--", alpha=0.7)
+
+        plt.tight_layout()
+        plt.savefig(f"{output_prefix}-contrast-violin.svg")
+        plt.close()
+    else:
+        typer.echo("Only one rate column found; skipping contrast plot.")
 
 @app.command()
 def trace(
