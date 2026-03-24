@@ -21,7 +21,7 @@ Given a multiple sequence alignment and a list of groups to test for episodic ev
 - Compute and plot Bayes factors for the marginal likelihood analyses.
 - Produce maximum clade credibility (MCC) trees for each clock model.
 - Compute bayes factor on effect size for the FLC models (foreground vs background).
-- Run rank and quantile tests on the all the models.
+- Run rank and quantile tests on the relaxed clock models.
 - Handel the execution of the pipeline on a HPC cluster via snakemake profiles.
 - Produce a report of the results (TBD).
 
@@ -54,7 +54,13 @@ episodic run \
 ```
 
 ## Outputs
-Episodic will produce a range on log files, trees and plots. The following is a list of the main outputs.
+Episodic produces BEAST logs, trees, summary tables and plots under `output.dir` (optionally timestamped when `output.dated: true`).
+
+For the complete output file reference (all targets, side-effect files, and optional branches), see:
+
+- [docs/workflow.md](docs/workflow.md)
+
+Main output categories include:
 
 - **BEAST log files** - `episodic` will produce a BEAST log file for each clock model. These files can be analysed with [Beastiary](https://beastiary.wytamma.com/).
 ![](docs/images/beastiary.png)
@@ -68,8 +74,10 @@ Episodic will produce a range on log files, trees and plots. The following is a 
     |Rate Column|p_p|p_odds|pos_p|pos_odds|bf|
     |---|---|---|---|---|---|
     |BA.2.86.rate|0.5034996111543162|1.0140971134481986|1.0|inf|inf|
-- **Rank and quantile tests** - `episodic` will produce a rank and quantile test plot for each clock model.
+- **Rank and quantile tests** - `episodic` will produce a rank and quantile test plot for each relaxed clock model.
 ![](docs/images/rate_quantiles.svg)
+
+- **Partition local-rate posterior plots (FLC clocks)** - overlaid background vs local posterior densities per partition.
 
 - **Clock rate plots** - `episodic` will produce a rate plot for each clock model.
 ![](docs/images/rate-rug.png)
