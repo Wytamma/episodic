@@ -1,15 +1,22 @@
 from utils import decimal_year_to_date
 from scripts.populate_beast_template import taxa_from_fasta
 
-if config["alignment"] is None or not config["group"]:
-    raise ValueError("Must specify alignment and group")
+if config["alignment"] is None:
+    raise ValueError("Must specify alignment")
 
 if type(config["alignment"]) != list:
     config["alignment"] = [config["alignment"]]
 
-if type(config["group"]) != list:
-    # group must be list
+if type(config["clock"]) != list:
+    config["clock"] = [config["clock"]]
+
+if config["group"] is None:
+    config["group"] = []
+elif type(config["group"]) != list:
     config["group"] = [config["group"]]
+
+if any("flc" in clock for clock in config["clock"]) and not config["group"]:
+    raise ValueError("Must specify at least one group when an FLC clock is selected")
 
 SNAKE_DIR = Path(workflow.basedir)
 TEMPLATE_DIR = SNAKE_DIR / "templates"
@@ -38,6 +45,7 @@ relaxed_clocks = [c for c in clocks if "relaxed" in c]
 alignment_paths=config["alignment"]
 date_delimiter=config["date_delimiter"]
 date_index=config["date_index"]
+has_multiple_partitions = len(alignment_paths) > 1
 
 duplicates = range(1, config['beast']["duplicates"] + 1) if fit_clocks else []
 mle_duplicates = range(1, config["marginal_likelihood"].get("duplicates") + 1) if MLE else []
@@ -105,10 +113,19 @@ CLOCK_FILES.extend(
     )
 )
 
+CLOCK_FILES.extend(
+    expand(
+        CLOCK_DIR / "{clock}" / "{clock}-partition_local_rate_posteriors.{ext}",
+        clock=flc_clocks if has_multiple_partitions else [],
+        ext=["csv", "svg"],
+    )
+)
+
 
 
 OUTPUT_FILES = [
     OUT_DIR / "config.yaml",
+    OUT_DIR / "taxon_groups.tsv",
 ]
 
 if fit_clocks:

@@ -2,6 +2,7 @@
 rule create_beast_xml:
     input:
         alignments = config["alignment"],
+        groups_file = OUT_DIR / "taxon_groups.tsv",
     output:
         beast_XML_file = CLOCK_DIR / "{clock}" / "{name}" / "{name}.xml",
     params:
@@ -9,7 +10,6 @@ rule create_beast_xml:
         alignments = lambda wildcards, input: " ".join(f"--alignment {alignment}" for alignment in input.alignments),
         date_delimiter = "\|" if config.get("date_delimiter") == "|" else config.get("date_delimiter"),
         date_index = config.get("date_index", -1),
-        groups = " ".join(config.get("group")),
         clock = lambda wildcards: wildcards.clock.split("_")[0],
         rate_gamma_prior_shape = config.get("rate_gamma_prior_shape"),
         rate_gamma_prior_scale = config.get("rate_gamma_prior_scale"),
@@ -17,7 +17,7 @@ rule create_beast_xml:
         samples = config["beast"].get("samples"),
         mle = lambda wildcards: "--mle" if "mle" in wildcards.name else "",
         mle_chain_length = f"--mle-chain-length {config['marginal_likelihood'].get('chain_length')}",
-        mle_path_steps = f"--mle-path-steps {config['marginal_likelihood'].get('paths')}",
+        mle_path_steps = f"--mle-path-steps {config['marginal_likelihood'].get('path_steps')}",
         mle_log_every = f"--mle-log-every {config['marginal_likelihood'].get('log_every')}",
         no_trace = lambda wildcards: "--no-trace" if "mle" in wildcards.name else "",
         no_trees = lambda wildcards: "--no-trees" if "mle" in wildcards.name else "",
@@ -30,7 +30,7 @@ rule create_beast_xml:
             {params.alignments} \
             --date-delimiter {params.date_delimiter} \
             --date-index {params.date_index} \
-            --groups {params.groups} \
+            --groups-file {input.groups_file} \
             --clock {params.clock} \
             --rate-gamma-prior-shape {params.rate_gamma_prior_shape} \
             --rate-gamma-prior-scale {params.rate_gamma_prior_scale} \
