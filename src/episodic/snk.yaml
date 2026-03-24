@@ -10,7 +10,7 @@ annotations:
     default: null
   group:
     type: List[str]
-    help: "[REQUIRED] Group sequences containing this value (in the header) to define a FLC. Can specify multiple."
+    help: "[REQUIRED for FLC clocks] Group sequences containing this value (in the header) to define local clock lineages. Can specify multiple."
     required: false
     short: g
     default: null
@@ -98,9 +98,7 @@ annotations:
     envmodules:
       type: List[str]
       help: "List of environment modules to load for beast."
-      default:
-        - "GCC/11.3.0"
-        - "beagle-lib/3.1.2-CUDA-11.7.0"
+      default: []
   marginal_likelihood:
     estimate:
       type: bool
@@ -108,9 +106,9 @@ annotations:
       required: false
       default: false
       short: mle
-    paths:
+    path_steps:
       type: int
-      help: "Number of paths to use for the marginal likelihood estimation."
+      help: "Number of path steps to use for the marginal likelihood estimation."
       required: false
       default: 100
     chain_length:
