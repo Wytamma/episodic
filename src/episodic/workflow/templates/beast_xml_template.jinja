@@ -15,10 +15,8 @@
 	<!-- Groups for FLC -->
 	{% for group in groups %}
     <taxa id="{{ group }}">
-		{% for taxon in taxa -%}
-		{% if group is in taxon.id %}
-		<taxon idref="{{ taxon.id }}"/>
-		{% endif %}
+		{% for taxon_id in groupMembers[group] -%}
+		<taxon idref="{{ taxon_id }}"/>
 		{%- endfor %}
     </taxa>
 	{% endfor %}
@@ -210,12 +208,14 @@
 		</clade>
 		{% endif %}
 		{% endfor %}
+		{% if clock in ['flc-stem', 'flc-shared-stem'] %}
 		<externalBranches>
 			<parameter idref="{{ partition.prefix }}.clock.rate"/>
 			{% for group in groups %}
 			<taxa idref="{{ group }}"/>
 			{% endfor %}
 		</externalBranches>
+		{% endif %}
 	</localClockModel>
 	{% endif %}
 
@@ -382,11 +382,13 @@
 	<mcmc id="mcmc" chainLength="{{ chainLength }}" autoOptimize="true">
 		<joint id="joint">
 			<prior id="prior">
+				{% if groups %}
 				<booleanLikelihood>
 					{% for group in groups %}
 					<monophylyStatistic idref="monophyly({{ group }})"/>
 					{% endfor %}
 				</booleanLikelihood>
+				{% endif %}
 				{% for partition in partitions %}
 				<dirichletPrior alpha="1.0" sumsTo="6.0">
 					<parameter idref="{{ partition.prefix }}.gtr.rates"/>
