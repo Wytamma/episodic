@@ -1,12 +1,18 @@
 import csv
 from bisect import bisect_left
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, List
 
 import dendropy
 import matplotlib.pyplot as plt
 import numpy as np
 import typer
+
+try:
+  from episodic.workflow.scripts.write_taxon_groups import read_group_members
+except ModuleNotFoundError:
+  from write_taxon_groups import read_group_members
 
 app = typer.Typer()
 
@@ -32,13 +38,13 @@ def extract_and_sort_rates(tree):
     sorted_rates = sorted(rates)
     return sorted_rates
 
-def analyze_tree(tree, groups, group_stats):
+def analyze_tree(tree, group_members, group_stats):
     """
     Analyzes a given tree and updates group statistics.
 
     Args:
       tree (dendropy.Tree): The tree to analyze.
-      groups (List[str]): The group labels to analyze.
+      group_members (Dict[str, List[str]]): Taxa assigned to each analyzed group.
       group_stats (Dict[str, Dict[str, List]]): A dictionary containing group statistics.
 
     Returns:
@@ -49,25 +55,28 @@ def analyze_tree(tree, groups, group_stats):
     """
     # Assuming sorted_rates is generated here for each tree passed to this function
     sorted_rates = extract_and_sort_rates(tree)
-    rates = np.array(sorted_rates)  # For efficient operations with numpy
-    for group in groups:
-        nodes_in_clade = [node for node in tree if node.taxon is not None and group in node.taxon.label]
-        mrca = tree.mrca(taxon_labels=[node.taxon.label for node in nodes_in_clade])
+    tree_taxa = {node.taxon.label for node in tree if node.taxon is not None}
+    for group, taxa in group_members.items():
+        taxon_labels = [taxon for taxon in taxa if taxon in tree_taxa]
+        if not taxon_labels:
+            msg = f"Group '{group}' has no taxa present in the tree."
+            raise ValueError(msg)
+
+        mrca = tree.mrca(taxon_labels=taxon_labels)
         group_rate = float(mrca.annotations.get_value("rate"))
 
         # Use bisect_left for efficient rank finding in a sorted list
         rank = bisect_left(sorted_rates, group_rate) + 1
         group_stats[group]["ranks"].append(rank)
 
-        # Use numpy for efficient percentile calculation
-        quantile = np.percentile(rates, group_rate, method="lower")
+        quantile = rank / len(sorted_rates)
         group_stats[group]["quantiles"].append(quantile)
 
 
 @app.command()
 def analyze_rates(
     trees_path: str = typer.Argument(..., help="Path to the BEAST output trees file"),
-    groups: List[str] = typer.Option(..., "--group", "-g", help="Group labels to analyze"),
+    groups_file: Path = typer.Option(..., "--groups-file", help="TSV mapping taxa to group labels"),
     output_plot_path: str = typer.Option(..., "--output-plot", help="Output path for the plot file"),
     output_csv_path: str = typer.Option(..., "--output-csv", help="Output path for the CSV file"),
     burnin: float = typer.Option(0.1, "--burnin", "-b", help="Fraction of trees to discard as burn-in"),
@@ -77,7 +86,7 @@ def analyze_rates(
 
     Args:
       trees_path (str): The path to the BEAST output trees file.
-      groups (List[str]): The group labels to analyze.
+      groups_file (Path): TSV mapping taxa to group labels.
       output_plot_path (str): The output path for the plot file.
       output_csv_path (str): The output path for the CSV file.
       burnin (float): The fraction of trees to discard as burn-in.
@@ -86,8 +95,11 @@ def analyze_rates(
       None
 
     Examples:
-      >>> analyze_rates('trees.nexus', ['A', 'B'], 'plot.png', 'stats.csv', 0.1)
+      >>> analyze_rates('trees.nexus', Path('groups.tsv'), 'plot.png', 'stats.csv', 0.1)
     """
+    group_members = read_group_members(groups_file)
+    groups = list(group_members)
+
     # time ow long it takes to run
     now = datetime.now()
     tree_yielder = dendropy.Tree.yield_from_files(files=[trees_path], schema="nexus", preserve_underscores=True)
@@ -111,7 +123,7 @@ def analyze_rates(
         for tree_idx, tree in enumerate(progress):
             if tree_idx < burnin_count:
                 continue
-            analyze_tree(tree, groups, group_stats)
+            analyze_tree(tree, group_members, group_stats)
 
     csv_data = [
         [

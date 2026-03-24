@@ -7,6 +7,7 @@ from typing import List, Optional
 
 from jinja2 import StrictUndefined, Template
 
+from episodic.workflow.scripts.write_taxon_groups import build_group_members, read_group_members
 from episodic.workflow.utils import date_to_decimal_year
 
 
@@ -195,8 +196,9 @@ def populate_beast_template(
     name: str,
     template_path: Path,
     alignment_paths: List[Path],
-    groups: list,
     clock: str,
+    groups: Optional[List[str]] = None,
+    groups_file: Optional[Path] = None,
     rate_gamma_prior_shape: float = 0.5,
     rate_gamma_prior_scale: float = 0.1,
     chain_length: int = 100000000,
@@ -221,6 +223,7 @@ def populate_beast_template(
             template_path (Path): The path to the input Beast template file.
             alignment_paths (List[Path]): The paths to the input alignment partitions.
             groups (list): A list of groups to include in the analysis.
+            groups_file (Path): Optional TSV mapping taxa to groups.
             clock (str): The clock model to use in the analysis.
             rate_gamma_prior_shape (float): The shape parameter of the gamma prior on the rate.
             rate_gamma_prior_scale (float): The scale parameter of the gamma prior on the rate.
@@ -271,6 +274,27 @@ def populate_beast_template(
     # Parse alignment partitions into Taxon objects
     partitions = build_partitions(alignment_paths, date_delimiter=date_delimiter, date_index=date_index)
     taxa = partitions[0].taxa
+    taxon_ids = [taxon.id for taxon in taxa]
+
+    if groups_file is not None:
+        group_members = read_group_members(groups_file)
+        groups = list(group_members)
+    elif groups is not None:
+        group_members = build_group_members(taxon_ids, groups)
+    else:
+        msg = "Either groups or groups_file must be provided."
+        raise ValueError(msg)
+
+    missing_taxa = {
+        taxon_id
+        for members in group_members.values()
+        for taxon_id in members
+        if taxon_id not in taxon_ids
+    }
+    if missing_taxa:
+        missing_taxa_str = ", ".join(sorted(missing_taxa))
+        msg = f"Group mapping references taxa not present in the alignment: {missing_taxa_str}"
+        raise ValueError(msg)
 
     if fixed_tree is not None:
         fixed_tree = fixed_tree.read_text()
@@ -306,6 +330,7 @@ def populate_beast_template(
         taxa=taxa,
         partitions=partitions,
         groups=groups,
+        groupMembers=group_members,
         clock=clock,
         fixedTree=fixed_tree,
         rateGammaPriorShape=rate_gamma_prior_shape,
@@ -348,9 +373,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--groups",
         nargs="+",
-        required=True,
         help="List of groups to include in the analysis. Space-separated list.",
     )
+    parser.add_argument("--groups-file", type=Path, help="TSV mapping taxa to group labels.")
     parser.add_argument(
         "--clock",
         type=str,
@@ -416,6 +441,7 @@ if __name__ == "__main__":
         date_delimiter=args.date_delimiter,
         date_index=args.date_index,
         groups=args.groups,
+        groups_file=args.groups_file,
         clock=args.clock,
         chain_length=1 if args.mle else args.chain_length,
         samples=args.samples,
