@@ -20,7 +20,7 @@ marginal_likelihood:
   duplicates: 3
   estimate: false
   log_every: 100
-  paths: 10
+  path_steps: 10
 mcc_tree:
   heights:
   - mean

@@ -1,36 +1,32 @@
-alignment: tests/data/Tay2023.afa
-beast:
-  chain_length: 10000
-  duplicates: 2
-  envmodules:
-  - GCC/11.3.0
-  - beagle-lib/3.1.2-CUDA-11.7.0
-  fit_clocks: true
-  samples: 10000
-  template: null
-  threads: 4
+# Clocks to compare
 clock:
-- flc-stem
+- strict
+- relaxed
+- flc-shared-stem
+# Gamma prior settings for clock rates (applies to all clocks, including background and foreground rates in FLC models)
+rate_gamma_prior_scale: 0.1
+rate_gamma_prior_shape: 0.5
+# BEAST MCMC settings
+beast:
+  chain_length: 10000000
+  samples: 1000
+  duplicates: 2 # run in duplicate to check convergence
+  threads: 4
+# We expect the format of fasta headers to be ID@GROUP@DATE, 
+# e.g. EPI_ISL_12345678@B.1.1.7@2020.11 (date is in decimal years)
 date_delimiter: '@'
 date_index: -1
+# These groups will be forced monophyletic and assigned to the foreground in the FLC models
 group: 
 - B.1.1.7
 - B.1.351
 - P.1
 - B.1.617.2
+# Marginal likelihood estimation settings
 marginal_likelihood:
-  chain_length: 1000
-  duplicates: 3
-  estimate: false
-  log_every: 100
-  paths: 10
-mcc_tree:
-  heights:
-  - mean
-newick: null
+  chain_length: 1000000
+  duplicates: 5
+  log_every: 1000
+  path_steps: 100
 output:
-  dated: true
-  dir: results
-rate_gamma_prior_scale: 0.1
-rate_gamma_prior_shape: 0.5
-
+  dir: Tay2023
