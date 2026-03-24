@@ -24,6 +24,7 @@ classifiers = [
 ]
 dependencies = [
   "snk-cli==0.3.1",
+  "snakemake==7.32.4",
 ]
 
 [project.urls]
