@@ -19,7 +19,7 @@ rule plot_traces:
     Makes trace plots from the beast log file.
     """
     input:
-        rules.run_beast.output.beast_log_file,
+        rules.beast.output.beast_log_file,
     output:
         directory(CLOCK_DIR / "{clock}" / "{name}" / "{name}_trace_plots/"),
     conda:

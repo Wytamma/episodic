@@ -47,7 +47,7 @@ rule create_beast_xml:
 
 TREES = {"beast_trees_file": CLOCK_DIR / "{clock}" / "{name}" / "{name}.trees"} if config.get("trees") else {}
 
-rule run_beast:
+rule beast:
     input:
         beast_XML_file = rules.create_beast_xml.output.beast_XML_file,
     output:
@@ -72,7 +72,7 @@ use rule create_beast_xml as create_mle_xml with:
     output:
         beast_XML_file = MLE_OUT_DIR / "{name}.xml",
 
-use rule run_beast as run_mle_beast with:
+use rule beast as mle with:
     input:
         beast_XML_file = rules.create_mle_xml.output.beast_XML_file,
     output:

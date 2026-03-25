@@ -22,7 +22,7 @@ rule max_clade_credibility_tree:
     Makes trace plots from the beast log file.
     """
     input:
-        rules.run_beast.output.beast_trees_file,
+        rules.beast.output.beast_trees_file,
     output:
         CLOCK_DIR / "{clock}" / "{name}" / "{name}.mcc.{heights}.nexus",
     params:
@@ -71,7 +71,7 @@ rule max_clade_credibility_tree_render:
 
 rule rate_quantile_analysis:
     input:
-        trees_file = rules.run_beast.output.beast_trees_file,
+        trees_file = rules.beast.output.beast_trees_file,
         groups_file = rules.taxon_groups.output,
     output:
         csv = CLOCK_DIR / "{clock}" / "{name}" / "{name}.stem.rate_quantiles.csv",

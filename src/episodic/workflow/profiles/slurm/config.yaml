@@ -24,10 +24,10 @@ cluster: >-
 cluster-cancel: scancel
 # Job resources
 set-resources:
-  - run_beast:mem_mb=4G
-  - run_beast:runtime=10080
-  - run_mle_beast:mem_mb=4G
-  - run_mle_beast:runtime=10080
+  - beast:mem_mb=4G
+  - beast:runtime=10080
+  - mle:mem_mb=4G
+  - mle:runtime=10080
   
 # For some reasons time needs quotes to be read by snakemake
 default-resources:
@@ -37,6 +37,6 @@ default-resources:
   - mem_mb='4G'
   - nodes=1
   - tasks_per_node=1
-  - qos='covid19'
+  - qos=''
   - gres=''
   - extra=''
