@@ -99,7 +99,7 @@ annotations:
       type: str
       help: "Additional command-line arguments to pass to BEAST."
       required: false
-      default: "-beagle -beagle_SSE -beagle_CPU"
+      default: "-beagle -beagle_auto"
     envmodules:
       type: List[str]
       help: "List of environment modules to load for beast."
