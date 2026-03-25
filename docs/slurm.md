@@ -52,3 +52,52 @@ On some clusters, you may need to load environment modules to access BEAST and/o
 ```bash
 episodic run --config config.yaml --profile slurm-gpu --groups beast=gpuGroup --group-components=gpuGroup=4 --beast-envmodules "GCC/11.3.0" --beast-envmodules "beagle-lib/3.1.2-CUDA-11.7.0" --use-envmodules
 ```
+
+## Choosing the BEAGLE backend (`beast.args`)
+
+You can control which BEAGLE backend BEAST uses either by setting `beast.args` in your config (persistent) or with `--beast-args` on `episodic run` (one-off override).
+
+When a job requests GPU resources (`gres` contains `gpu`, as in the bundled `slurm-gpu` profile), Episodic automatically rewrites `-beagle_CPU` to `-beagle_GPU` at runtime in the BEAST rule.
+
+That means this works without additional overrides:
+
+```console
+episodic run --profile slurm-gpu ...
+```
+
+CPU-only (most stable default across datasets):
+
+```yaml
+beast:
+  args: "-beagle -beagle_CPU"
+```
+
+```console
+episodic run --profile slurm --beast-args "-beagle -beagle_CPU" ...
+```
+
+Force GPU backend on SLURM GPU nodes:
+
+```yaml
+beast:
+  args: "-beagle -beagle_GPU"
+```
+
+```console
+episodic run --profile slurm-gpu --beast-args "-beagle -beagle_GPU" ...
+```
+
+Auto-select with single precision (can help on some Apple Silicon/OpenCL setups):
+
+```yaml
+beast:
+  args: "-beagle_auto -beagle_single"
+```
+
+```console
+episodic run --profile slurm --beast-args "-beagle_auto -beagle_single" ...
+```
+
+!!! note
+
+    BEAGLE's startup benchmark may not always match end-to-end MCMC runtime for every dataset. If GPU is selected but runs are slower in practice, prefer `-beagle -beagle_CPU` for that workflow.
