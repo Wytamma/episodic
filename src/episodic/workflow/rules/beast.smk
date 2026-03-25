@@ -60,7 +60,11 @@ rule beast:
     conda:
         "../envs/beast.yml"
     params:
-        beast_args = config["beast"].get("args", ""),
+        beast_args = lambda wildcards, resources: (
+            config["beast"].get("args", "").replace("-beagle_CPU", "-beagle_GPU")
+            if "gpu" in str(getattr(resources, "gres", ""))
+            else config["beast"].get("args", "")
+        ),
     shell:
         """
         beast -working -overwrite {params.beast_args} -threads {threads} {input.beast_XML_file} > {output.beast_stdout_file}
