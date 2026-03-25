@@ -1,6 +1,7 @@
 from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
+import re
 import textwrap
 from typing import List, Optional
 
@@ -113,7 +114,10 @@ def density_xy(values: np.ndarray, bins: int = 100) -> tuple[np.ndarray, np.ndar
 
 def wrap_label(label: str, width: int = 28) -> str:
     """Wrap long parameter labels to reduce overlap in plots."""
-    return textwrap.fill(label, width=width, break_long_words=True, break_on_hyphens=True)
+    label = label.replace("_", " ")
+    label = re.sub(r"(?<!\d)\.|\.(?!\d)", " ", label)
+    wrapped = textwrap.fill(label, width=width, break_long_words=False, break_on_hyphens=False)
+    return wrapped
 
 
 def wrapped_label_map(labels: List[str], width: int = 28) -> dict[str, str]:
@@ -200,6 +204,8 @@ def rates(
         dataset,
         figsize=(12, len(df.columns) * 4),
         )
+    plt.tight_layout(h_pad=2.0)
+    plt.subplots_adjust(hspace=0.5)
     plt.savefig(f"{output_prefix}-trace.svg")
 
     # plot interactive trace
