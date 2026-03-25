@@ -4,7 +4,7 @@
 
 This guide shows how to run a partitioned H1N1 HA analysis with `episodic` using a strict molecular clock and no FLC foreground groups.
 
-![](/images/clocks_0.5_0.1-violin-rug-trimmed.svg)
+![](/images/H1N1_dag.png)
 
 ## Reference
 
@@ -47,7 +47,7 @@ Expected files:
 
 ## Run
 
-![](/images/H1N1_dag.png)
+
 
 Validate configuration:
 
@@ -78,3 +78,7 @@ Trace comparison example across duplicate runs:
 
 ![](/images/age(root)_1.png)
 ![](/images/age(root)_2.png)
+
+Compare the rates of the two partitions:
+
+![](/images/clocks_0.5_0.1-violin-rug-trimmed.svg)
