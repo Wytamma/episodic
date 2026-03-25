@@ -89,6 +89,7 @@ For each `{clock}`, `{duplicate}`, and configured `{heights}`:
 | File pattern | Description |
 |---|---|
 | `OUT_DIR/clocks/{clock}/{clock}-odds.csv` | Per-clock odds/BF summary |
+| `OUT_DIR/clocks/clocks_{shape}_{scale}-odds.csv` | Combined odds/BF summary concatenating all configured FLC clocks |
 
 Additional side-effect per-duplicate files:
 
@@ -132,6 +133,7 @@ OUT_DIR/
 	config.yaml
 	taxon_groups.tsv
 	clocks/
+		clocks_0.5_0.1-odds.csv
 		flc-shared-stem-and-clade_0.5_0.1/
 			flc-shared-stem-and-clade_0.5_0.1-summary.csv
 			flc-shared-stem-and-clade_0.5_0.1-odds.csv
