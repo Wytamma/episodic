@@ -29,7 +29,9 @@ Then run `episodic run --profile my-slurm-gpu` to execute the workflow with your
 You can use `--set-resources` to override SLURM resource settings on the command line. For example, to request 16 GB of memory and a runtime of 4 hours for BEAST runs:
 
 ```console
-episodic run --profile slurm --set-resources beast:mem_mb=16G --set-resources beast:runtime=04:00:00
+episodic run --profile slurm \
+  --set-resources beast:mem_mb=16G \
+  --set-resources beast:runtime=04:00:00
 ```
 
 !!! note
@@ -37,7 +39,9 @@ episodic run --profile slurm --set-resources beast:mem_mb=16G --set-resources be
     The marginal likelihood estimation rule (`mle`) also has resource settings that can be overridden in the same way, for example:
     
     ```console
-    episodic run --profile slurm --set-resources mle:mem_mb=16G --set-resources mle:runtime=04:00:00 --set-resources run_beast:partition=gpu-a100
+    episodic run --profile slurm \
+      --set-resources=mle:mem_mb=16G \
+      --set-resources=mle:runtime=04:00:00
     ```
 
 ## Optimising GPU runs
@@ -45,5 +49,7 @@ episodic run --profile slurm --set-resources beast:mem_mb=16G --set-resources be
 When running beast on GPU nodes its often beneficial to run multiple BEAST runs per node to maximise GPU utilisation. You can achieve this by using the [groups feature of Snakemake](https://snakemake.readthedocs.io/en/stable/executing/grouping.html) to group multiple BEAST runs together and submit them as a single job. For example, to group BEAST runs in batches of 4:
 
 ```console
-episodic run --profile slurm-gpu --groups beast=gpuGroup --group-components gpuGroup=4
+episodic run --profile slurm-gpu \
+  --groups=beast=gpuGroup \
+  --group-components=gpuGroup=4
 ```
