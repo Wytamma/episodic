@@ -104,6 +104,9 @@ CLOCK_FILES.extend(
     [CLOCK_DIR / f"{clock}" / f"{clock}-odds.csv" for clock in flc_clocks],
 )
 CLOCK_FILES.extend(
+    [CLOCK_DIR / f"clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-odds.csv"] if flc_clocks else [],
+)
+CLOCK_FILES.extend(
     expand(
         CLOCK_DIR / "clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-{type}.svg", 
         type=["trace", "violin"],

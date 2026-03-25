@@ -104,6 +104,22 @@ rule calculate_odds:
         """
 
 
+rule combine_odds:
+    input:
+        [CLOCK_DIR / f"{clock}" / f"{clock}-odds.csv" for clock in flc_clocks],
+    output:
+        CLOCK_DIR / f"clocks_{rate_gamma_prior_shape}_{rate_gamma_prior_scale}-odds.csv",
+    shell:
+        """
+        first_file="$(echo {input} | awk '{{print $1}}')"
+        head -n 1 "$first_file" > {output}
+        for file in {input}
+        do
+            tail -n +2 "$file" >> {output}
+        done
+        """
+
+
 rule plot_partition_local_rate_posteriors:
     """
     Plots posterior densities of per-partition background vs local rates.
