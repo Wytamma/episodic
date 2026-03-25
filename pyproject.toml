@@ -184,9 +184,3 @@ episodic = { path = ".", editable = true }
 [tool.pixi.dependencies]
 conda = ">=26.1.1,<27"
 mamba = ">=2.5.0,<3"
-
-[tool.pixi.environments]
-beastiary = ["beastiary"]
-
-[dependency-groups]
-beastiary = ["beastiary"]
