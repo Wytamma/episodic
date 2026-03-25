@@ -1,4 +1,4 @@
-# Running Episodic on a SLURM cluster
+# SLURM Cluster
 
 > Episodic + SLURM + GPU go brrr. 
 
@@ -50,7 +50,11 @@ episodic run --profile slurm \
 On some clusters, you may need to load environment modules to access BEAST and/or GPU drivers. You can specify modules to load with the `--beast-envmodules` flag and the `--use-envmodules` flag to enable module loading. For example:
 
 ```bash
-episodic run --config config.yaml --profile slurm-gpu --groups beast=gpuGroup --group-components=gpuGroup=4 --beast-envmodules "GCC/11.3.0" --beast-envmodules "beagle-lib/3.1.2-CUDA-11.7.0" --use-envmodules
+episodic run --config config.yaml \
+  --profile slurm-gpu \
+  --beast-envmodules "GCC/11.3.0" \
+  --beast-envmodules "beagle-lib/3.1.2-CUDA-11.7.0" \
+  --use-envmodules
 ```
 
 ## Choosing the BEAGLE backend (`beast.args`)
