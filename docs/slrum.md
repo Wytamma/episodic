@@ -44,12 +44,11 @@ episodic run --profile slurm \
       --set-resources=mle:runtime=04:00:00
     ```
 
-## Optimising GPU runs
 
-When running beast on GPU nodes its often beneficial to run multiple BEAST runs per node to maximise GPU utilisation. You can achieve this by using the [groups feature of Snakemake](https://snakemake.readthedocs.io/en/stable/executing/grouping.html) to group multiple BEAST runs together and submit them as a single job. For example, to group BEAST runs in batches of 4:
+## Environment modules
 
-```console
-episodic run --profile slurm-gpu \
-  --groups=beast=gpuGroup \
-  --group-components=gpuGroup=4
+On some clusters, you may need to load environment modules to access BEAST and/or GPU drivers. You can specify modules to load with the `--beast-envmodules` flag and the `--use-envmodules` flag to enable module loading. For example:
+
+```bash
+episodic run --config config.yaml --profile slurm-gpu --groups beast=gpuGroup --group-components=gpuGroup=4 --beast-envmodules "GCC/11.3.0" --beast-envmodules "beagle-lib/3.1.2-CUDA-11.7.0" --use-envmodules
 ```
