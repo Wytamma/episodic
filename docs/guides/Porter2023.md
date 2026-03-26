@@ -77,7 +77,7 @@ episodic run \
 
 In the clocks_1.0_0.001-violin-trimmed.png plot, the FLC stem models show a clear rate increase on the stem branches leading into mink clades, while the clade models show no increase within the mink clades. This suggests that the rate shift is concentrated on the transition branches rather than being sustained within the mink lineages, consistent with an episodic burst of adaptation during host-jump. The Netherlands mink clade shows a stronger rate increase than the Denmark clade, which is averaged out in the shared-parameter models.
 
-![](/images/clocks_1.0_0.001-violin-trimmed.png)
+![](/images/clocks_1.0_0.001-violin-trimmed.svg)
 
 The odds ratios and Bayes factors comparing the posterior probability of elevated rates in the foreground groups relative to the background are consistent with this interpretation: there is weak evidence against an elevated rate for the Denmark stem branch (BF = 0.724) and decisive evidence for an elevated rate in the Netherlands stem branch (BF = inf).
 
