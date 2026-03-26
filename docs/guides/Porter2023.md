@@ -75,13 +75,13 @@ episodic run \
 
 ## Key outputs
 
-In the clocks_1.0_0.01-violin-rug-trimmed.png plot, the FLC stem models show a clear rate increase on the stem branches leading into mink clades, while the clade models show no increase within the mink clades. This suggests that the rate shift is concentrated on the transition branches rather than being sustained within the mink lineages, consistent with an episodic burst of adaptation during host-jump. The Netherlands mink clade shows a stronger rate increase than the Denmark clade, which is averaged out in the shared-parameter models. 
+In the clocks_1.0_0.001-violin-trimmed.png plot, the FLC stem models show a clear rate increase on the stem branches leading into mink clades, while the clade models show no increase within the mink clades. This suggests that the rate shift is concentrated on the transition branches rather than being sustained within the mink lineages, consistent with an episodic burst of adaptation during host-jump. The Netherlands mink clade shows a stronger rate increase than the Denmark clade, which is averaged out in the shared-parameter models.
 
-![](/images/clocks_1.0_0.01-violin-rug-trimmed.png)
+![](/images/clocks_1.0_0.001-violin-trimmed.png)
 
-The odds ratios and Bayes factors comparing the posterior probability of elevated rates in the foreground groups relative to the background are also consistent with this interpretation, with anecdotal evidence for elevated rates in the Denmark stem branch (~2.5 bf) and decisive evidence for elevated rates in the Netherlands stem branch (infinite bf).
+The odds ratios and Bayes factors comparing the posterior probability of elevated rates in the foreground groups relative to the background are consistent with this interpretation: there is weak evidence against an elevated rate for the Denmark stem branch (BF = 0.724) and decisive evidence for an elevated rate in the Netherlands stem branch (BF = inf).
 
 | Rate Column | Background Column | p_p | p_odds | pos_p | pos_odds | bf |
 | --- | --- | ---: | ---: | ---: | ---: | ---: |
-| Porter2023.mink_Denmark.stem.rate | Porter2023.clock.rate | 0.48668146503884574 | 0.9481081081081083 | 0.9223085460599334 | 11.87142857142857 | 2.527421297946331 |
-| Porter2023.mink_Netherlands.stem.rate | Porter2023.clock.rate | 0.48668146503884574 | 0.9481081081081083 | 1.0 | inf | inf |
+| Porter2023.mink_Denmark.stem.rate | Porter2023.clock.rate | 0.48961226530385515 | 0.9592947322594689 | 0.6643150761026553 | 1.9789839483700151 | 0.7241404740143056 |
+| Porter2023.mink_Netherlands.stem.rate | Porter2023.clock.rate | 0.48961226530385515 | 0.9592947322594689 | 1.0 | inf | inf |
