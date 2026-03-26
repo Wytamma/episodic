@@ -40,7 +40,7 @@ For the complete output file reference (including optional branches and side-eff
 
 Reproducible walkthroughs for previously published studies are documented in:
 
-- [Guides](guides/index.md)
+- [Guides](guides/H1N1Partitions.md)
 
 ## Features
 
