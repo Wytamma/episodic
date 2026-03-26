@@ -63,7 +63,7 @@ For the complete output file reference (all targets, side-effect files, and opti
 Main output categories include:
 
 - **BEAST log files** - `episodic` will produce a BEAST log file for each clock model. These files can be analysed with [Beastiary](https://beastiary.wytamma.com/).
-![](docs/images/beastiary.png)
+![](docs/images/age(root)_1.png)
 - **BEAST trees** - `episodic` will produce a BEAST tree file for each clock model.
 - **MCC trees** - `episodic` will produce a MCC tree for each clock model.
 - **MCC tree plots** - `episodic` will produce a MCC tree plot for each clock model.
