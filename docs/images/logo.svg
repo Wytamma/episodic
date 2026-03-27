@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="27.893 6.311 193.448 142.495">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="27.893 6.311 193.448 142.495" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:export>
+      <bx:file format="png" width="400" height="294"/>
+    </bx:export>
+  </defs>
   <text style="fill: rgb(46, 204, 113); font-family: Arial, sans-serif; font-size: 28px; white-space: pre; stroke-width: 1;" x="-176.4" y="-163.81"><tspan x="37.062" y="87.858" style="font-size: 27.1px; word-spacing: 0px; stroke-width: 1;">Epi</tspan><tspan style="fill: rgb(192, 57, 43); font-size: 27.1px; word-spacing: 0px; stroke-width: 1;">s</tspan><tspan style="font-size: 27.1px; word-spacing: 0px; stroke-width: 1;">odic</tspan></text>
   <polyline style="fill: none; stroke: rgb(192, 58, 43); stroke-width: 3; stroke-linejoin: round;" points="73.072 107.976 73.072 123.82 85.094 123.82"/>
   <polyline style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" points="34.296 108.45 34.296 40.877 62.664 40.877 62.664 24.484 114.634 24.484"/>
