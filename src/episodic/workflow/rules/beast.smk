@@ -1,4 +1,6 @@
 
+import random
+
 rule create_beast_xml:
     input:
         alignments = config["alignment"],
@@ -65,9 +67,10 @@ rule beast:
             if "gpu" in str(getattr(resources, "gres", ""))
             else config["beast"].get("args", "")
         ),
+        seed = lambda wildcards: config["beast"].get("seed", random.randint(1, 2**31 - 1)),
     shell:
         """
-        beast -working -overwrite {params.beast_args} -threads {threads} {input.beast_XML_file} > {output.beast_stdout_file}
+        beast -seed {params.seed} -working -overwrite {params.beast_args} -threads {threads} {input.beast_XML_file} > {output.beast_stdout_file}
         """
 
 MLE_OUT_DIR = OUT_DIR / "mle" / "{clock}"
