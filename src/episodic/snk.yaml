@@ -102,8 +102,8 @@ annotations:
       default: "-beagle -beagle_CPU"
     envmodules:
       type: List[str]
-      help: "List of environment modules to load for beast."
-      default: []
+      help: "Environment modules to load for beast."
+      default: ["GCC/11.3.0", "beagle-lib/4.0.1-CUDA-12.2.0"]
   marginal_likelihood:
     estimate:
       type: bool

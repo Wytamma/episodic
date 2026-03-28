@@ -53,7 +53,7 @@ On some clusters, you may need to load environment modules to access BEAST and/o
 episodic run --config config.yaml \
   --profile slurm-gpu \
   --beast-envmodules "GCC/11.3.0" \
-  --beast-envmodules "beagle-lib/3.1.2-CUDA-11.7.0" \
+  --beast-envmodules "beagle-lib/4.0.1-CUDA-12.2.0" \
   --use-envmodules
 ```
 
