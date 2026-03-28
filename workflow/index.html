@@ -1,0 +1,1245 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../slurm/">
+      
+      
+        <link rel="next" href="../guides/H1N1Partitions/">
+      
+      
+      <link rel="icon" href="../images/favicon.ico">
+      <meta name="generator" content="mkdocs-1.5.3, mkdocs-material-9.5.18">
+    
+    
+      
+        <title>Workflow Outputs - Episodic</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.66ac8b77.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#workflow-outputs" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Episodic" class="md-header__button md-logo" aria-label="Episodic" data-md-component="logo">
+      
+  <img src="../images/logo.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Episodic
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Workflow Outputs
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12c0-2.42-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69Z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var media,input,key,value,palette=__md_get("__palette");if(palette&&palette.color){"(prefers-color-scheme)"===palette.color.media&&(media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']"),palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent"));for([key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/wytamma/episodic" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Episodic" class="md-nav__button md-logo" aria-label="Episodic" data-md-component="logo">
+      
+  <img src="../images/logo.png" alt="logo">
+
+    </a>
+    Episodic
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/wytamma/episodic" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M439.55 236.05 244 40.45a28.87 28.87 0 0 0-40.81 0l-40.66 40.63 51.52 51.52c27.06-9.14 52.68 16.77 43.39 43.68l49.66 49.66c34.23-11.8 61.18 31 35.47 56.69-26.49 26.49-70.21-2.87-56-37.34L240.22 199v121.85c25.3 12.54 22.26 41.85 9.08 55a34.34 34.34 0 0 1-48.55 0c-17.57-17.6-11.07-46.91 11.25-56v-123c-20.8-8.51-24.6-30.74-18.64-45L142.57 101 8.45 235.14a28.86 28.86 0 0 0 0 40.81l195.61 195.6a28.86 28.86 0 0 0 40.8 0l194.69-194.69a28.86 28.86 0 0 0 0-40.81z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Home
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../installation/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Installation
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    QuickStart
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slurm/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    SLURM Cluster
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  <span class="md-ellipsis">
+    Workflow Outputs
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  <span class="md-ellipsis">
+    Workflow Outputs
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#output-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output root
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Naming tokens
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#always-produced" class="md-nav__link">
+    <span class="md-ellipsis">
+      Always produced
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-per-clock-beast-outputs-beastfit_clocks-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core per-clock BEAST outputs (beast.fit_clocks: true)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-clock-summaries-and-rate-plots" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per-clock summaries and rate plots
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-clock summaries and rate plots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-side-effect-files-from-rate-plotting-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional side-effect files from rate plotting scripts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcc-tree-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCC tree outputs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clock-type-specific-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clock-type-specific outputs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clock-type-specific outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flc-odds-effect-size-bayes-factors-flc-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      FLC odds / effect-size Bayes factors (flc* clocks)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relaxed-clock-stem-quantile-analysis-relaxed-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relaxed-clock stem quantile analysis (relaxed* clocks)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flc-partition-local-rate-posterior-comparison-flc-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      FLC partition local-rate posterior comparison (flc* clocks)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marginal-likelihood-outputs-marginal_likelihoodestimate-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      Marginal likelihood outputs (marginal_likelihood.estimate: true)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimal-directory-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Minimal directory example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-outputs-are-present" class="md-nav__link">
+    <span class="md-ellipsis">
+      Which outputs are present?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Guides
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            Guides
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/H1N1Partitions/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Partitioned H1N1 strict-clock analysis
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/Porter2023/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reproducing Porter et al. (2023)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../guides/Tay2023/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Reproducing Tay et al. (2023)
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  <span class="md-ellipsis">
+    Reference
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../reference/scripts/" class="md-nav__link">
+        
+  
+  <span class="md-ellipsis">
+    Scripts
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#output-root" class="md-nav__link">
+    <span class="md-ellipsis">
+      Output root
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#naming-tokens" class="md-nav__link">
+    <span class="md-ellipsis">
+      Naming tokens
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#always-produced" class="md-nav__link">
+    <span class="md-ellipsis">
+      Always produced
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#core-per-clock-beast-outputs-beastfit_clocks-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      Core per-clock BEAST outputs (beast.fit_clocks: true)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#per-clock-summaries-and-rate-plots" class="md-nav__link">
+    <span class="md-ellipsis">
+      Per-clock summaries and rate plots
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Per-clock summaries and rate plots">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#additional-side-effect-files-from-rate-plotting-scripts" class="md-nav__link">
+    <span class="md-ellipsis">
+      Additional side-effect files from rate plotting scripts
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mcc-tree-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      MCC tree outputs
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#clock-type-specific-outputs" class="md-nav__link">
+    <span class="md-ellipsis">
+      Clock-type-specific outputs
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Clock-type-specific outputs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#flc-odds-effect-size-bayes-factors-flc-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      FLC odds / effect-size Bayes factors (flc* clocks)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#relaxed-clock-stem-quantile-analysis-relaxed-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      Relaxed-clock stem quantile analysis (relaxed* clocks)
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#flc-partition-local-rate-posterior-comparison-flc-clocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      FLC partition local-rate posterior comparison (flc* clocks)
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#marginal-likelihood-outputs-marginal_likelihoodestimate-true" class="md-nav__link">
+    <span class="md-ellipsis">
+      Marginal likelihood outputs (marginal_likelihood.estimate: true)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#minimal-directory-example" class="md-nav__link">
+    <span class="md-ellipsis">
+      Minimal directory example
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#which-outputs-are-present" class="md-nav__link">
+    <span class="md-ellipsis">
+      Which outputs are present?
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  
+    <a href="https://github.com/wytamma/episodic/edit/main/docs/workflow.md" title="Edit this page" class="md-content__button md-icon">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4v-2m10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1 2.1 2.1Z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="workflow-outputs">Workflow Outputs</h1>
+<p>This page documents all files produced by the Episodic workflow, including:</p>
+<ul>
+<li>Snakemake target outputs (requested by <code>rule all</code>)</li>
+<li>Additional side-effect files produced by plotting/report scripts</li>
+</ul>
+<h2 id="output-root">Output root</h2>
+<p>All outputs are written under:</p>
+<ul>
+<li><code>output.dir</code> (from config), or</li>
+<li><code>output.dir/YYYY-MM-DDTHH:MM:SS</code> when <code>output.dated: true</code></li>
+</ul>
+<p>Examples below use <code>OUT_DIR</code> to represent that resolved output root.</p>
+<h2 id="naming-tokens">Naming tokens</h2>
+<ul>
+<li><code>{clock}</code>: clock model name including gamma prior suffix, e.g. <code>flc-stem_0.5_0.1</code></li>
+<li><code>{duplicate}</code>: BEAST run replicate index (1..N)</li>
+<li><code>{heights}</code>: MCC summary option, e.g. <code>mean</code>, <code>median</code>, <code>keep</code>, <code>ca</code></li>
+</ul>
+<p>For BEAST run artifacts, <code>{name}</code> is typically <code>{clock}_{duplicate}</code>.</p>
+<h2 id="always-produced">Always produced</h2>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/config.yaml</code></td>
+<td>Rendered workflow configuration used for the run</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/taxon_groups.tsv</code></td>
+<td>Taxon-to-group assignments used by local clock models</td>
+</tr>
+</tbody>
+</table>
+<h2 id="core-per-clock-beast-outputs-beastfit_clocks-true">Core per-clock BEAST outputs (<code>beast.fit_clocks: true</code>)</h2>
+<p>For each <code>{clock}</code> and <code>{duplicate}</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.xml</code></td>
+<td>BEAST XML analysis file</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.stdout</code></td>
+<td>BEAST stdout log</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.log</code></td>
+<td>BEAST posterior trace log</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.trees</code></td>
+<td>Posterior tree samples</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}_trace_plots/</code></td>
+<td>Trace PNGs per variable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="per-clock-summaries-and-rate-plots">Per-clock summaries and rate plots</h2>
+<p>Per-clock rate/comparison plots are generated for <code>flc*</code> clocks. Combined <code>clocks_{shape}_{scale}-*</code> plots aggregate all configured clocks.</p>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-summary.csv</code></td>
+<td>ArviZ posterior summary table</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-violin.svg</code></td>
+<td>Clock-rate violin plot</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-forest.svg</code></td>
+<td>Forest plot of posterior medians and 95% HDIs for rate parameters</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-prior-vs-posterior.svg</code></td>
+<td>Prior-versus-posterior density overlays for rate parameters</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-contrast-violin.svg</code></td>
+<td>Violin plot of posterior rate differences relative to a baseline rate</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/clocks_{shape}_{scale}-violin.svg</code></td>
+<td>Combined violin plot across clocks</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/clocks_{shape}_{scale}-forest.svg</code></td>
+<td>Combined forest comparison across clocks</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/clocks_{shape}_{scale}-prior-vs-posterior.svg</code></td>
+<td>Combined prior-versus-posterior density overlays across clocks</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/clocks_{shape}_{scale}-contrast-violin.svg</code></td>
+<td>Combined posterior rate-difference violin plot across clocks</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/clocks_{shape}_{scale}-trace.svg</code></td>
+<td>Combined trace plot across clocks</td>
+</tr>
+</tbody>
+</table>
+<h3 id="additional-side-effect-files-from-rate-plotting-scripts">Additional side-effect files from rate plotting scripts</h3>
+<p>The plotting scripts also emit extra artifacts sharing the same output prefix:</p>
+<ul>
+<li><code>*-violin-rug.svg</code></li>
+<li><code>*-violin-trimmed.svg</code></li>
+<li><code>*-violin-rug-trimmed.svg</code></li>
+<li><code>*-trace.svg</code></li>
+<li><code>*-trace.html</code></li>
+</ul>
+<p>These are generated for both per-clock and combined clock prefixes.</p>
+<h2 id="mcc-tree-outputs">MCC tree outputs</h2>
+<p>For each <code>{clock}</code>, <code>{duplicate}</code>, and configured <code>{heights}</code>:</p>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.mcc.{heights}.nexus</code></td>
+<td>MCC tree in NEXUS format</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.mcc.{heights}.nwk</code></td>
+<td>MCC tree in Newick format</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.mcc.{heights}.svg</code></td>
+<td>MCC tree render</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.mcc.{heights}.height_0.95_HPD.svg</code></td>
+<td>MCC tree with 95% HPD node ranges</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.mcc.{heights}.posterior.svg</code></td>
+<td>MCC tree with posterior node labels</td>
+</tr>
+</tbody>
+</table>
+<h2 id="clock-type-specific-outputs">Clock-type-specific outputs</h2>
+<h3 id="flc-odds-effect-size-bayes-factors-flc-clocks">FLC odds / effect-size Bayes factors (<code>flc*</code> clocks)</h3>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-odds.csv</code></td>
+<td>Per-clock odds/BF summary</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/clocks_{shape}_{scale}-odds.csv</code></td>
+<td>Combined odds/BF summary concatenating all configured FLC clocks</td>
+</tr>
+</tbody>
+</table>
+<p>Additional side-effect per-duplicate files:</p>
+<ul>
+<li><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}-odds.csv</code></li>
+</ul>
+<h3 id="relaxed-clock-stem-quantile-analysis-relaxed-clocks">Relaxed-clock stem quantile analysis (<code>relaxed*</code> clocks)</h3>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.stem.rate_quantiles.csv</code></td>
+<td>Stem branch rank/quantile table</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}_{duplicate}/{clock}_{duplicate}.stem.rate_quantiles.svg</code></td>
+<td>Stem branch rank/quantile plot</td>
+</tr>
+</tbody>
+</table>
+<h3 id="flc-partition-local-rate-posterior-comparison-flc-clocks">FLC partition local-rate posterior comparison (<code>flc*</code> clocks)</h3>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-partition_local_rate_posteriors.csv</code></td>
+<td>Long-format posterior rates used for plotting</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/clocks/{clock}/{clock}-partition_local_rate_posteriors.svg</code></td>
+<td>Overlaid background vs local posterior densities by partition</td>
+</tr>
+</tbody>
+</table>
+<h2 id="marginal-likelihood-outputs-marginal_likelihoodestimate-true">Marginal likelihood outputs (<code>marginal_likelihood.estimate: true</code>)</h2>
+<p>Per MLE run files:</p>
+<table>
+<thead>
+<tr>
+<th>File pattern</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/mle/{clock}/{clock}_mle_{duplicate}.xml</code></td>
+<td>MLE XML</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/mle/{clock}/{clock}_mle_{duplicate}.stdout</code></td>
+<td>MLE stdout</td>
+</tr>
+</tbody>
+</table>
+<p>Aggregated MLE summaries:</p>
+<table>
+<thead>
+<tr>
+<th>File</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>OUT_DIR/mle/mle.svg</code></td>
+<td>Marginal likelihood comparison plot</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/mle/mle.csv</code></td>
+<td>Raw extracted MLE values</td>
+</tr>
+<tr>
+<td><code>OUT_DIR/mle/mle.grouped.csv</code></td>
+<td>Grouped/aggregated MLE values</td>
+</tr>
+</tbody>
+</table>
+<h2 id="minimal-directory-example">Minimal directory example</h2>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>OUT_DIR/
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    config.yaml
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    taxon_groups.tsv
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    clocks/
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>        clocks_0.5_0.1-odds.csv
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>        flc-shared-stem-and-clade_0.5_0.1/
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>            flc-shared-stem-and-clade_0.5_0.1-summary.csv
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            flc-shared-stem-and-clade_0.5_0.1-odds.csv
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            flc-shared-stem-and-clade_0.5_0.1-partition_local_rate_posteriors.csv
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            flc-shared-stem-and-clade_0.5_0.1-partition_local_rate_posteriors.svg
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>            flc-shared-stem-and-clade_0.5_0.1_1/
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>                flc-shared-stem-and-clade_0.5_0.1_1.log
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>                flc-shared-stem-and-clade_0.5_0.1_1.trees
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>                flc-shared-stem-and-clade_0.5_0.1_1.mcc.mean.nexus
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>                flc-shared-stem-and-clade_0.5_0.1_1.mcc.mean.nwk
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>                flc-shared-stem-and-clade_0.5_0.1_1.mcc.mean.svg
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>                flc-shared-stem-and-clade_0.5_0.1_1_trace_plots/
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>    mle/
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>        mle.svg
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>        mle.csv
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>        mle.grouped.csv
+</span></code></pre></div>
+<h2 id="which-outputs-are-present">Which outputs are present?</h2>
+<ul>
+<li><code>beast.fit_clocks: false</code> → suppresses most <code>clocks/</code> BEAST-derived outputs</li>
+<li><code>marginal_likelihood.estimate: false</code> → no <code>mle/</code> outputs</li>
+<li>No <code>relaxed</code> clocks configured → no <code>*.stem.rate_quantiles.*</code></li>
+<li>No <code>flc</code> clocks configured → no <code>*-partition_local_rate_posteriors.*</code></li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+    <a href="https://github.com/Wytamma/write-the" target="_blank" rel="noopener" title="Generated with write-the" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M320 0c17.7 0 32 14.3 32 32v64h120c39.8 0 72 32.2 72 72v272c0 39.8-32.2 72-72 72H168c-39.8 0-72-32.2-72-72V168c0-39.8 32.2-72 72-72h120V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16h-32zM264 256a40 40 0 1 0-80 0 40 40 0 1 0 80 0zm152 40a40 40 0 1 0 0-80 40 40 0 1 0 0 80zM48 224h16v192H48c-26.5 0-48-21.5-48-48v-96c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48h-16V224h16z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["toc.follow", "content.action.edit"], "search": "../assets/javascripts/workers/search.b8dbb3d2.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.3220b9d7.min.js"></script>
+      
+    
+  </body>
+</html>
