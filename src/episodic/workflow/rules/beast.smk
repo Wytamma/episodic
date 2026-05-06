@@ -1,5 +1,17 @@
 
-import random
+import hashlib
+
+MAX_BEAST_SEED = 2**31 - 1
+
+def beast_seed(wildcards):
+    """Generate a deterministic seed for BEAST based on the base seed, clock, and name.
+    This ensures that the same seed is used for the same clock and name across runs, while
+    allowing for different seeds for different clocks and names.
+    """
+    base_seed = config["beast"].get("seed", "episodic")
+    seed_key = f"{base_seed}:{wildcards.clock}:{wildcards.name}"
+    seed_hash = hashlib.sha256(seed_key.encode()).hexdigest()
+    return int(seed_hash[:8], 16) % MAX_BEAST_SEED + 1
 
 rule create_beast_xml:
     input:
@@ -67,7 +79,7 @@ rule beast:
             if "gpu" in str(getattr(resources, "gres", ""))
             else config["beast"].get("args", "")
         ),
-        seed = lambda wildcards: config["beast"].get("seed", random.randint(1, 2**31 - 1)),
+        seed = beast_seed,
     shell:
         """
         beast -seed {params.seed} -working -overwrite {params.beast_args} -threads {threads} {input.beast_XML_file} > {output.beast_stdout_file}
