@@ -146,6 +146,14 @@ CLOCK_FILES.extend(
     )
 )
 
+CLOCK_FILES.extend(
+    expand(
+        CLOCK_DIR / "{clock}" / "{clock}-substitution_model_rates.{ext}",
+        clock=flc_clocks,
+        ext=["csv", "svg"],
+    )
+)
+
 
 
 OUTPUT_FILES = [

@@ -149,3 +149,27 @@ rule plot_partition_local_rate_posteriors:
           {params.foreground_label} \
           {params.background_label}
         """
+
+
+rule plot_flc_substitution_model_rates:
+    """
+    Plots GTR substitution-model relative rates from FLC logs.
+    """
+    input:
+        lambda wildcards: [
+            CLOCK_DIR / wildcards.clock / f"{wildcards.clock}_{duplicate}" / f"{wildcards.clock}_{duplicate}.log"
+            for duplicate in duplicates
+            if "flc" in wildcards.clock
+        ],
+    output:
+        svg=CLOCK_DIR / "{clock}" / "{clock}-substitution_model_rates.svg",
+        csv=CLOCK_DIR / "{clock}" / "{clock}-substitution_model_rates.csv",
+    conda:
+        "../envs/python.yml"
+    shell:
+        """
+        ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/plot_flc_substitution_model_rates.py \
+          {input} \
+          {output.svg} \
+          {output.csv}
+        """
