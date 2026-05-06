@@ -4,6 +4,8 @@
 
 This guide documents a partitioned SARS-CoV-2 FLC analysis in white-tail deer, following [McBride et al. (2023)](https://www.nature.com/articles/s41467-023-40706-y). The workflow uses `episodic` to run a Fixed Local Clock (FLC) analysis with multiple partitions corresponding to different genomic regions. The analysis focuses on comparing evolutionary rates across partitions and identifying accelerated evolution associated with host adaptation in deer.
 
+![](/images/McBride2023_dag.png)
+
 This analysis combine the previous guides on partitioning and FLC models to demonstrate how to set up a complex workflow with multiple partitions and a local-clock model.
 
 A local clock root to tip regression of the dataset is available via the [Clockor2 webapp](https://clockor2.github.io/?newick=https://gist.githubusercontent.com/Wytamma/4f8896cfc95dc2edddd86e09789a528a/raw/894e82c947104a66d0f804a01a94901ec2990b9b/McBride2023-R2.newick&format=yyyy-mm-dd&delimiter=%7C&loc=-2&group=-1). Root-to-tip regression is a useful exploratory tool for assessing temporal signal and clock-like behavior in the data, clockor2 allows you to interactively explore and fit local clock models to the data, which can inform the design of the full BEAST analysis.
