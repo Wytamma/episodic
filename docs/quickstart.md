@@ -143,6 +143,8 @@ The table below lists the workflow config keys, their CLI flags, and defaults.
 | --- | --- | --- | --- |
 | `alignment` | `--alignment`, `-a` | `null` | Path to a FASTA alignment partition. Repeat for multiple partitions. Required for real runs. |
 | `group` | `--group`, `-g` | `null` | Header-matching group string used to define FLC foreground lineages. Repeat for multiple groups. Required for FLC clocks. |
+| `foreground_label` | `--foreground-label` | `null` | Optional label for shared foreground/local FLC rate parameters and plot labels. With partitions, the label follows the partition, for example `HA2.Bird.clade.rate`. |
+| `background_label` | `--background-label` | `background` | Optional label for background clock-rate parameters and plot labels. With partitions, the label follows the partition, for example `HA2.Human.clock.rate`; without this option the default is `HA2.background.clock.rate`. |
 | `clock` | `--clock` | `flc-stem` | Clock model to run. Repeat for multiple models. Options: `strict`, `relaxed`, `flc-stem`, `flc-shared-stem`, `flc-clade`, `flc-shared-clade`, `flc-stem-and-clade`, `flc-shared-stem-and-clade`. |
 | `rate_gamma_prior_shape` | `--rate-gamma-prior-shape`, `-shape` | `0.5` | Shape parameter for the gamma prior on clock rates. |
 | `rate_gamma_prior_scale` | `--rate-gamma-prior-scale`, `-scale` | `0.1` | Scale parameter for the gamma prior on clock rates. |

@@ -31,9 +31,10 @@ Notes:
 
 ::: src.episodic.workflow.scripts.plot_partition_local_rate_posteriors
 
+::: src.episodic.workflow.scripts.plot_flc_substitution_model_rates
+
 ::: src.episodic.workflow.scripts.plot_traces
 
 ::: src.episodic.workflow.scripts.tree_converter
 
 ::: src.episodic.workflow.scripts.populate_beast_template
-
