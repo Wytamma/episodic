@@ -107,7 +107,9 @@ Additional side-effect per-duplicate files:
 | File pattern | Description |
 |---|---|
 | `OUT_DIR/clocks/{clock}/{clock}-partition_local_rate_posteriors.csv` | Long-format posterior rates used for plotting |
-| `OUT_DIR/clocks/{clock}/{clock}-partition_local_rate_posteriors.svg` | Overlaid background vs local posterior densities by partition |
+| `OUT_DIR/clocks/{clock}/{clock}-partition_local_rate_posteriors.svg` | Overlaid background vs local posterior frequency histograms by partition |
+| `OUT_DIR/clocks/{clock}/{clock}-substitution_model_rates.csv` | Long-format posterior log GTR relative rates by partition |
+| `OUT_DIR/clocks/{clock}/{clock}-substitution_model_rates.svg` | Boxplots of posterior log GTR relative rates by substitution type and partition |
 
 ## Marginal likelihood outputs (`marginal_likelihood.estimate: true`)
 
@@ -139,6 +141,8 @@ OUT_DIR/
 			flc-shared-stem-and-clade_0.5_0.1-odds.csv
 			flc-shared-stem-and-clade_0.5_0.1-partition_local_rate_posteriors.csv
 			flc-shared-stem-and-clade_0.5_0.1-partition_local_rate_posteriors.svg
+			flc-shared-stem-and-clade_0.5_0.1-substitution_model_rates.csv
+			flc-shared-stem-and-clade_0.5_0.1-substitution_model_rates.svg
 			flc-shared-stem-and-clade_0.5_0.1_1/
 				flc-shared-stem-and-clade_0.5_0.1_1.log
 				flc-shared-stem-and-clade_0.5_0.1_1.trees
@@ -157,5 +161,4 @@ OUT_DIR/
 - `beast.fit_clocks: false` → suppresses most `clocks/` BEAST-derived outputs
 - `marginal_likelihood.estimate: false` → no `mle/` outputs
 - No `relaxed` clocks configured → no `*.stem.rate_quantiles.*`
-- No `flc` clocks configured → no `*-partition_local_rate_posteriors.*`
-
+- No `flc` clocks configured → no `*-partition_local_rate_posteriors.*` or `*-substitution_model_rates.*`
