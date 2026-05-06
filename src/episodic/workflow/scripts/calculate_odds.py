@@ -1,6 +1,6 @@
 from pathlib import Path
 import re
-from typing import List
+from typing import List, Optional
 
 import numpy as np
 import pandas as pd
@@ -46,12 +46,43 @@ def calculate_log_diff(pos_odds, p_odds):
 app = typer.Typer()
 
 
+def _safe_label(label: Optional[str]) -> Optional[str]:
+    if label is None:
+        return None
+    safe_label = re.sub(r"[^0-9A-Za-z_.-]+", "_", label.strip()).strip("._-")
+    if not safe_label:
+        return None
+    if not safe_label[0].isalpha():
+        safe_label = f"label_{safe_label}"
+    return safe_label
+
+
+def _strip_label_token(prefix: str, label: Optional[str]) -> str:
+    safe_label = _safe_label(label)
+    if safe_label is None:
+        return prefix
+    if prefix == safe_label:
+        return ""
+    if prefix.startswith(f"{safe_label}."):
+        return prefix[len(safe_label) + 1 :]
+    if prefix.endswith(f".{safe_label}"):
+        return prefix[: -(len(safe_label) + 1)]
+    return prefix
+
+
+def _rate_key(column: str, suffix: str, label: Optional[str] = None) -> str:
+    prefix = column[: -len(suffix)]
+    return _strip_label_token(prefix, label)
+
+
 @app.command()
 def calculate_odds(
     logs: List[Path] = typer.Argument(..., help="The path to the log CSV file"),
     output_file: str = typer.Argument(..., help="The path to the output CSV file where the results will be saved"),
     gamma_shape: float = typer.Option(..., help="The shape parameter for the gamma distribution"),
     gamma_scale: float = typer.Option(..., help="The scale parameter for the gamma distribution"),
+    foreground_label: Optional[str] = typer.Option(None, help="Optional foreground/local-rate label prefix."),
+    background_label: Optional[str] = typer.Option(None, help="Optional background-rate label prefix."),
     burnin: float = typer.Option(0.1, "--burnin", "-b", help="Fraction of trees to discard as burn-in"),
 ):
     """
@@ -83,14 +114,14 @@ def calculate_odds(
     # Identify local clock rate columns and compare them to the matching
     # partition background rate. For backward compatibility, unpartitioned
     # analyses still use `clock.rate`.
-    background_pattern = re.compile(r"^(?P<prefix>.+)\.clock\.rate$")
     partition_backgrounds = {
-        match.group("prefix"): column
+        _rate_key(column, ".clock.rate", background_label or "background"): column
         for column in df.columns
-        for match in [background_pattern.match(column)]
-        if match
+        if column.endswith(".clock.rate")
     }
     default_background = "clock.rate" if "clock.rate" in df.columns else None
+    if default_background is None and len(partition_backgrounds) == 1:
+        default_background = next(iter(partition_backgrounds.values()))
 
     rate_columns = []
     for col in df.columns:
@@ -116,13 +147,13 @@ def calculate_odds(
     for rate_column in rate_columns:
         pos_fg = df[rate_column]
 
-        background_column = default_background
-        for partition_prefix, candidate_background in sorted(
-            partition_backgrounds.items(), key=lambda item: len(item[0]), reverse=True
-        ):
-            if rate_column.startswith(f"{partition_prefix}."):
-                background_column = candidate_background
-                break
+        rate_key = _rate_key(rate_column, ".rate", foreground_label)
+        local_parts = rate_key.split(".")
+
+        background_column = partition_backgrounds.get(rate_key, default_background)
+        while background_column is None and local_parts:
+            local_parts = local_parts[:-1]
+            background_column = partition_backgrounds.get(".".join(local_parts))
 
         if background_column is None:
             raise ValueError(

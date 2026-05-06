@@ -34,11 +34,15 @@ class Partition:
     Dataclass representing an alignment partition.
 
     Attributes:
-      prefix (str): XML-safe prefix used for IDs.
+      prefix (str): XML-safe prefix used for non-rate IDs.
+      background_prefix (str): XML-safe prefix used for background-rate IDs.
+      foreground_prefix (str): XML-safe prefix used for foreground/local-rate IDs.
       taxa (List[Taxon]): Partition sequences keyed by shared taxon IDs.
     """
 
     prefix: str
+    background_prefix: str
+    foreground_prefix: str
     taxa: List[Taxon]
 
 
@@ -89,7 +93,42 @@ def build_partition_prefix(alignment_path: Path, used_prefixes: set) -> str:
     return candidate
 
 
-def build_partitions(alignment_paths: List[Path], date_delimiter: str, date_index: int) -> List[Partition]:
+def xml_safe_label(label: Optional[str]) -> Optional[str]:
+    """Return a BEAST/XML-safe label prefix, or None when no label is set."""
+    if label is None:
+        return None
+
+    safe_label = re.sub(r"[^0-9A-Za-z_.-]+", "_", label.strip())
+    safe_label = safe_label.strip("._-")
+    if not safe_label:
+        return None
+    if not safe_label[0].isalpha():
+        safe_label = f"label_{safe_label}"
+    return safe_label
+
+
+def labeled_rate_prefix(
+    label: Optional[str],
+    partition_prefix: str,
+    multiple_partitions: bool,
+    default_label: Optional[str] = None,
+) -> str:
+    """Build the rate-parameter prefix for a partition and optional state label."""
+    safe_label = xml_safe_label(label) or xml_safe_label(default_label)
+    if safe_label is None:
+        return partition_prefix
+    if multiple_partitions:
+        return f"{partition_prefix}.{safe_label}"
+    return safe_label
+
+
+def build_partitions(
+    alignment_paths: List[Path],
+    date_delimiter: str,
+    date_index: int,
+    foreground_label: Optional[str] = None,
+    background_label: Optional[str] = None,
+) -> List[Partition]:
     """Parse and validate multiple FASTA alignments into BEAST partitions."""
     if not alignment_paths:
         msg = "At least one alignment partition must be provided."
@@ -99,6 +138,8 @@ def build_partitions(alignment_paths: List[Path], date_delimiter: str, date_inde
     partitions: List[Partition] = []
     reference_taxa: Optional[List[Taxon]] = None
     reference_by_id = {}
+
+    multiple_partitions = len(alignment_paths) > 1
 
     for alignment_path in alignment_paths:
         taxa = taxa_from_fasta(alignment_path, date_delimiter=date_delimiter, date_index=date_index)
@@ -132,9 +173,17 @@ def build_partitions(alignment_paths: List[Path], date_delimiter: str, date_inde
                     raise ValueError(msg)
                 ordered_taxa.append(taxon)
 
+        prefix = build_partition_prefix(alignment_path, used_prefixes)
         partitions.append(
             Partition(
-                prefix=build_partition_prefix(alignment_path, used_prefixes),
+                prefix=prefix,
+                background_prefix=labeled_rate_prefix(
+                    background_label,
+                    prefix,
+                    multiple_partitions,
+                    default_label="background",
+                ),
+                foreground_prefix=labeled_rate_prefix(foreground_label, prefix, multiple_partitions),
                 taxa=ordered_taxa,
             )
         )
@@ -209,6 +258,8 @@ def populate_beast_template(
     date_delimiter="|",
     date_index=-1,
     fixed_tree: Optional[Path] = None,
+    foreground_label: Optional[str] = None,
+    background_label: Optional[str] = None,
     *,
     trace: bool = True,
     trees: bool = True,
@@ -235,6 +286,8 @@ def populate_beast_template(
             date_delimiter (str): The delimiter for the date in the fasta header.
             date_index (int): The index of the date in the fasta header.
             fixed_tree (Path): The path to the fixed tree file.
+            foreground_label (str): Optional label prefix for foreground/local-rate parameters.
+            background_label (str): Optional label prefix for background clock-rate parameters.
 
     Keyword Args:
       trace (bool): Whether to enable the trace log.
@@ -272,7 +325,13 @@ def populate_beast_template(
     template = Template(template_path.read_text(), undefined=StrictUndefined)
 
     # Parse alignment partitions into Taxon objects
-    partitions = build_partitions(alignment_paths, date_delimiter=date_delimiter, date_index=date_index)
+    partitions = build_partitions(
+        alignment_paths,
+        date_delimiter=date_delimiter,
+        date_index=date_index,
+        foreground_label=foreground_label,
+        background_label=background_label,
+    )
     taxa = partitions[0].taxa
     taxon_ids = [taxon.id for taxon in taxa]
 
@@ -427,6 +486,8 @@ if __name__ == "__main__":
         help="Log every for the marginal likelihood estimator.",
     )
     parser.add_argument("--fixed-tree", type=Path, help="Path to the fixed tree file.")
+    parser.add_argument("--foreground-label", help="Optional label prefix for foreground/local-rate parameters.")
+    parser.add_argument("--background-label", help="Optional label prefix for background clock-rate parameters.")
     parser.add_argument("--output", type=Path, required=True, help="Path to the output Beast XML file.")
 
     # Parse the command line arguments
@@ -448,6 +509,8 @@ if __name__ == "__main__":
         fixed_tree=args.fixed_tree,
         rate_gamma_prior_shape=args.rate_gamma_prior_shape,
         rate_gamma_prior_scale=args.rate_gamma_prior_scale,
+        foreground_label=args.foreground_label,
+        background_label=args.background_label,
         trace=args.no_trace,
         trees=args.no_trees,
         mle=args.mle,

@@ -137,7 +137,7 @@
 	{% if clock == 'strict' %}
 	<strictClockBranchRates id="branchRates.{{ partition.prefix }}">
 		<rate>
-			<parameter id="{{ partition.prefix }}.clock.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.background_prefix }}.clock.rate" value="1.0" lower="0.0"/>
 		</rate>
 	</strictClockBranchRates>
 	{% elif clock == 'relaxed' %}
@@ -146,10 +146,10 @@
 		<distribution>
 			<gammaDistributionModel>
 				<mean>
-					<parameter id="{{ partition.prefix }}.ucgd.mean" value="1.0" lower="0.0"/>
+					<parameter id="{{ partition.background_prefix }}.ucgd.mean" value="1.0" lower="0.0"/>
 				</mean>
 				<shape>
-					<parameter id="{{ partition.prefix }}.ucgd.shape" value="0.3333333333333333" lower="0.0"/>
+					<parameter id="{{ partition.background_prefix }}.ucgd.shape" value="0.3333333333333333" lower="0.0"/>
 				</shape>
 			</gammaDistributionModel>
 		</distribution>
@@ -161,7 +161,7 @@
 	<localClockModel id="branchRates.{{ partition.prefix }}">
 		<treeModel idref="treeModel"/>
 		<rate>
-			<parameter id="{{ partition.prefix }}.clock.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.background_prefix }}.clock.rate" value="1.0" lower="0.0"/>
 		</rate>
 		{% for group in groups %}
 		{% if  clock == 'flc-stem' %}
@@ -172,9 +172,9 @@
 		{% elif clock == 'flc-shared-stem' %}
 		<clade includeStem="true" excludeClade="true">
 			{% if loop.first %}
-			<parameter id="{{ partition.prefix }}.stem.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.foreground_prefix }}.stem.rate" value="1.0" lower="0.0"/>
 			{% else %}
-			<rate idref="{{ partition.prefix }}.stem.rate"/>
+			<rate idref="{{ partition.foreground_prefix }}.stem.rate"/>
 			{% endif %}
 			<taxa idref="{{ group }}"/>
 		</clade>
@@ -186,9 +186,9 @@
 		{% elif clock == 'flc-shared-clade' %}
 		<clade includeStem="false" excludeClade="false">
 			{% if loop.first %}
-			<parameter id="{{ partition.prefix }}.clade.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.foreground_prefix }}.clade.rate" value="1.0" lower="0.0"/>
 			{% else %}
-			<rate idref="{{ partition.prefix }}.clade.rate"/>
+			<rate idref="{{ partition.foreground_prefix }}.clade.rate"/>
 			{% endif %}
 			<taxa idref="{{ group }}"/>
 		</clade>
@@ -200,9 +200,9 @@
 		{% elif clock == 'flc-shared-stem-and-clade' %}
 		<clade includeStem="true" excludeClade="false">
 			{% if loop.first %}
-			<parameter id="{{ partition.prefix }}.stem_and_clade.rate" value="1.0" lower="0.0"/>
+			<parameter id="{{ partition.foreground_prefix }}.stem_and_clade.rate" value="1.0" lower="0.0"/>
 			{% else %}
-			<rate idref="{{ partition.prefix }}.stem_and_clade.rate"/>
+			<rate idref="{{ partition.foreground_prefix }}.stem_and_clade.rate"/>
 			{% endif %}
 			<taxa idref="{{ group }}"/>
 		</clade>
@@ -210,7 +210,7 @@
 		{% endfor %}
 		{% if clock in ['flc-stem', 'flc-shared-stem'] %}
 		<externalBranches>
-			<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 			{% for group in groups %}
 			<taxa idref="{{ group }}"/>
 			{% endfor %}
@@ -281,30 +281,30 @@
 		</scaleOperator>
 		{% if clock == 'strict' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 		</scaleOperator>
 		<upDownOperator scaleFactor="0.75" weight="3">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
 			<down>
-				<parameter idref="{{ partition.prefix }}.clock.rate"/>
+				<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 			</down>
 		</upDownOperator>
 		{% endif %}
 		{% if clock == 'relaxed' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
+			<parameter idref="{{ partition.background_prefix }}.ucgd.mean"/>
 		</scaleOperator>
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.ucgd.shape"/>
+			<parameter idref="{{ partition.background_prefix }}.ucgd.shape"/>
 		</scaleOperator>
 		<upDownOperator scaleFactor="0.75" weight="3">
 			<up>
 				<parameter idref="treeModel.allInternalNodeHeights"/>
 			</up>
 			<down>
-				<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
+				<parameter idref="{{ partition.background_prefix }}.ucgd.mean"/>
 			</down>
 		</upDownOperator>
 		<swapOperator size="1" weight="10" autoOptimize="false">
@@ -315,7 +315,7 @@
 		</uniformIntegerOperator>
 		{% elif 'flc' in clock %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 		</scaleOperator>
 		{% if clock == 'flc-stem' %}
 		{% for group in groups %}
@@ -325,7 +325,7 @@
 		{% endfor %}
 		{% elif clock == 'flc-shared-stem' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.stem.rate"/>
+			<parameter idref="{{ partition.foreground_prefix }}.stem.rate"/>
 		</scaleOperator>
 		{% elif clock == 'flc-clade' %}
 		{% for group in groups %}
@@ -335,7 +335,7 @@
 		{% endfor %}
 		{% elif clock == 'flc-shared-clade' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.clade.rate"/>
+			<parameter idref="{{ partition.foreground_prefix }}.clade.rate"/>
 		</scaleOperator>
 		{% elif clock == 'flc-stem-and-clade' %}
 		{% for group in groups %}
@@ -345,7 +345,7 @@
 		{% endfor %}
 		{% elif clock == 'flc-shared-stem-and-clade' %}
 		<scaleOperator scaleFactor="0.75" weight="3">
-			<parameter idref="{{ partition.prefix }}.stem_and_clade.rate"/>
+			<parameter idref="{{ partition.foreground_prefix }}.stem_and_clade.rate"/>
 		</scaleOperator>
 		{% endif %}
 		{% endif %}
@@ -398,18 +398,18 @@
 				</exponentialPrior>
 				{% if clock == 'strict' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.clock.rate"/>
+					<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 				</gammaPrior>
 				{% elif clock == 'relaxed' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
+					<parameter idref="{{ partition.background_prefix }}.ucgd.mean"/>
 				</gammaPrior>
 				<exponentialPrior mean="0.3333333333333333" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.ucgd.shape"/>
+					<parameter idref="{{ partition.background_prefix }}.ucgd.shape"/>
 				</exponentialPrior>
 				{% elif 'flc' in clock %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.clock.rate"/>
+					<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 				</gammaPrior>
 				{% if clock == 'flc-stem' %}
 				{% for group in groups %}
@@ -419,7 +419,7 @@
 				{% endfor %}
 				{% elif clock == 'flc-shared-stem' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.stem.rate"/>
+					<parameter idref="{{ partition.foreground_prefix }}.stem.rate"/>
 				</gammaPrior>
 				{% elif clock == 'flc-clade' %}
 				{% for group in groups %}
@@ -429,7 +429,7 @@
 				{% endfor %}
 				{% elif clock == 'flc-shared-clade' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.clade.rate"/>
+					<parameter idref="{{ partition.foreground_prefix }}.clade.rate"/>
 				</gammaPrior>
 				{% elif clock == 'flc-stem-and-clade' %}
 				{% for group in groups %}
@@ -439,7 +439,7 @@
 				{% endfor %}
 				{% elif clock == 'flc-shared-stem-and-clade' %}
 				<gammaPrior shape="{{ rateGammaPriorShape }}" scale="{{ rateGammaPriorScale }}" offset="0.0">
-					<parameter idref="{{ partition.prefix }}.stem_and_clade.rate"/>
+					<parameter idref="{{ partition.foreground_prefix }}.stem_and_clade.rate"/>
 				</gammaPrior>
 				{% endif %}
 				{% endif %}
@@ -477,16 +477,16 @@
 			</column>
 			{% for partition in partitions %}
 			{% if clock == 'strict' %}
-			<column label="{{ partition.prefix }}.clock.rate" sf="6" width="16">
-				<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<column label="{{ partition.background_prefix }}.clock.rate" sf="6" width="16">
+				<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 			</column>
 			{% elif clock == 'relaxed' %}
-			<column label="{{ partition.prefix }}.ucgd.mean" sf="6" width="16">
-				<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
+			<column label="{{ partition.background_prefix }}.ucgd.mean" sf="6" width="16">
+				<parameter idref="{{ partition.background_prefix }}.ucgd.mean"/>
 			</column>
 			{% elif 'flc' in clock %}
-			<column label="{{ partition.prefix }}.clock.rate" sf="6" width="16">
-				<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<column label="{{ partition.background_prefix }}.clock.rate" sf="6" width="16">
+				<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 			</column>
 			{% endif %}
 			{% endfor %}
@@ -510,30 +510,30 @@
 			<parameter idref="{{ partition.prefix }}.gtr.rates"/>
 			<parameter idref="{{ partition.prefix }}.alpha"/>
 			{% if clock == 'strict' %}
-			<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 			{% elif clock == 'relaxed' %}
-			<parameter idref="{{ partition.prefix }}.ucgd.mean"/>
-			<parameter idref="{{ partition.prefix }}.ucgd.shape"/>
+			<parameter idref="{{ partition.background_prefix }}.ucgd.mean"/>
+			<parameter idref="{{ partition.background_prefix }}.ucgd.shape"/>
 			{% elif 'flc' in clock %}
-			<parameter idref="{{ partition.prefix }}.clock.rate"/>
+			<parameter idref="{{ partition.background_prefix }}.clock.rate"/>
 			{% if clock == 'flc-stem' %}
 			{% for group in groups %}
 			<parameter idref="{{ partition.prefix }}.{{ group }}.stem.rate"/>
 			{% endfor %}
 			{% elif clock == 'flc-shared-stem' %}
-			<parameter idref="{{ partition.prefix }}.stem.rate"/>
+			<parameter idref="{{ partition.foreground_prefix }}.stem.rate"/>
 			{% elif clock == 'flc-clade' %}
 			{% for group in groups %}
 			<parameter idref="{{ partition.prefix }}.{{ group }}.clade.rate"/>
 			{% endfor %}
 			{% elif clock == 'flc-shared-clade' %}
-			<parameter idref="{{ partition.prefix }}.clade.rate"/>
+			<parameter idref="{{ partition.foreground_prefix }}.clade.rate"/>
 			{% elif clock == 'flc-stem-and-clade' %}
 			{% for group in groups %}
 			<parameter idref="{{ partition.prefix }}.{{ group }}.stem_and_clade.rate"/>
 			{% endfor %}
 			{% elif clock == 'flc-shared-stem-and-clade' %}
-			<parameter idref="{{ partition.prefix }}.stem_and_clade.rate"/>
+			<parameter idref="{{ partition.foreground_prefix }}.stem_and_clade.rate"/>
 			{% endif %}
 			{% endif %}
 			<rateStatistic idref="{{ partition.prefix }}.meanRate"/>

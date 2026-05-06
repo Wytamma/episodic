@@ -36,6 +36,8 @@ rule create_beast_xml:
         no_trace = lambda wildcards: "--no-trace" if "mle" in wildcards.name else "",
         no_trees = lambda wildcards: "--no-trees" if "mle" in wildcards.name else "",
         fixed_tree = f'--fixed-tree {config.get("newick")}'  if config.get("newick") else "",
+        foreground_label = f'--foreground-label {config.get("foreground_label")}' if config.get("foreground_label") else "",
+        background_label = f'--background-label {config.get("background_label")}' if config.get("background_label") else "",
     shell:
         """
         python {SCRIPT_DIR}/populate_beast_template.py \
@@ -56,7 +58,9 @@ rule create_beast_xml:
             {params.mle_log_every} \
             {params.no_trace} \
             {params.no_trees} \
-            {params.fixed_tree}
+            {params.fixed_tree} \
+            {params.foreground_label} \
+            {params.background_label}
         """
 
 TREES = {"beast_trees_file": CLOCK_DIR / "{clock}" / "{name}" / "{name}.trees"} if config.get("trees") else {}

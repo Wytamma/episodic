@@ -92,14 +92,16 @@ rule calculate_odds:
         directory=lambda wildcards: CLOCK_DIR / f"{wildcards.clock}",
         gamma_shape=rate_gamma_prior_shape,
         gamma_scale=rate_gamma_prior_scale,
+        foreground_label=f'--foreground-label {config.get("foreground_label")}' if config.get("foreground_label") else "",
+        background_label=f'--background-label {config.get("background_label")}' if config.get("background_label") else "",
     conda:
         "../envs/python.yml"
     shell:
         """
-        ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/calculate_odds.py {input} {output} --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
+        ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/calculate_odds.py {input} {output} --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale} {params.foreground_label} {params.background_label}
         for file in {input}
         do
-            ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/calculate_odds.py $file ${{file%.log}}-odds.csv --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale}
+            ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/calculate_odds.py $file ${{file%.log}}-odds.csv --gamma-shape {params.gamma_shape} --gamma-scale {params.gamma_scale} {params.foreground_label} {params.background_label}
         done
         """
 
@@ -135,10 +137,15 @@ rule plot_partition_local_rate_posteriors:
         csv=CLOCK_DIR / "{clock}" / "{clock}-partition_local_rate_posteriors.csv",
     conda:
         "../envs/python.yml"
+    params:
+        foreground_label=f'--foreground-label {config.get("foreground_label")}' if config.get("foreground_label") else "",
+        background_label=f'--background-label {config.get("background_label")}' if config.get("background_label") else "",
     shell:
         """
         ${{CONDA_PREFIX}}/bin/python {SCRIPT_DIR}/plot_partition_local_rate_posteriors.py \
           {input} \
           {output.svg} \
-          {output.csv}
+          {output.csv} \
+          {params.foreground_label} \
+          {params.background_label}
         """

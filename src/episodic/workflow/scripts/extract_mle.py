@@ -79,7 +79,7 @@ sns.pointplot(
 )
 
 ax.xaxis.set_major_locator(MaxNLocator(nbins=6))
-ax.tick_params(axis="x", labelrotation=20)
+ax.tick_params(axis="x")
 fig.tight_layout()
 
 # Save the plot

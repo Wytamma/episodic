@@ -120,12 +120,25 @@ def wrap_label(label: str, width: int = 28) -> str:
     return wrapped
 
 
+def display_rate_label(label: str) -> str:
+    """Convert BEAST rate column IDs into concise plot labels."""
+    for suffix in (".clock.rate", ".ucgd.mean", ".rate"):
+        if label.endswith(suffix):
+            label = label[: -len(suffix)]
+            break
+
+    parts = label.split(".")
+    if len(parts) >= 4 and parts[0] == parts[2] and parts[-1] in {"stem", "clade", "stem_and_clade"}:
+        parts.pop(2)
+    return ".".join(parts)
+
+
 def wrapped_label_map(labels: List[str], width: int = 28) -> dict[str, str]:
     """Build a wrapped display-name mapping while preserving uniqueness."""
     mapping = {}
     used = set()
     for original in labels:
-        candidate = wrap_label(original, width=width)
+        candidate = wrap_label(display_rate_label(original), width=width)
         if candidate in used:
             idx = 2
             alt = f"{candidate}\n({idx})"
@@ -289,7 +302,10 @@ def compare(
     if contrast_columns:
         contrast_df = pd.DataFrame(
             {
-                wrap_label(f"{column} - {baseline}", width=32): posterior_df[column] - posterior_df[baseline]
+                wrap_label(
+                    f"{display_rate_label(column)} - {display_rate_label(baseline)}",
+                    width=32,
+                ): posterior_df[column] - posterior_df[baseline]
                 for column in contrast_columns
             },
             index=posterior_df.index,
