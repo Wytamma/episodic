@@ -32,6 +32,11 @@ if config["group"] is None:
 elif type(config["group"]) != list:
     config["group"] = [config["group"]]
 
+allowed_clocks = ['strict', 'relaxed', 'flc-stem', 'flc-shared-stem', 'flc-clade', 'flc-shared-clade', 'flc-stem-and-clade', 'flc-shared-stem-and-clade']
+
+if any(clock not in allowed_clocks for clock in config["clock"]):
+    raise ValueError(f"Invalid clock specified. Allowed clocks are: {', '.join(allowed_clocks)}")
+
 if any("flc" in clock for clock in config["clock"]) and not config["group"]:
     raise ValueError("Must specify at least one group when an FLC clock is selected")
 
