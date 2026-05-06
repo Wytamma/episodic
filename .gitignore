@@ -11,4 +11,6 @@ clocks/
 H1N1/
 out/
 Porter2023/
-Tay2023/
+Tay2023/# pixi environments
+.pixi/*
+!.pixi/config.toml
