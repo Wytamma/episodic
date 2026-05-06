@@ -34,6 +34,8 @@ episodic run \
   --output-dir McBride2023 \
   --beast-chain-length 50000000 \
   --clock flc-shared-clade \
+  --foreground-label Deer \
+  --background-label Human \
   -a deer_partitions/N.fasta \
   -a deer_partitions/ORF1a.fasta \
   -a deer_partitions/ORF1b.fasta \
