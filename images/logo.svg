@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="27.893 6.311 193.448 142.495" xmlns:bx="https://boxy-svg.com">
+  <defs>
+    <bx:export>
+      <bx:file format="png" width="400" height="294"/>
+    </bx:export>
+  </defs>
+  <text style="fill: rgb(46, 204, 113); font-family: Arial, sans-serif; font-size: 28px; white-space: pre; stroke-width: 1;" x="-176.4" y="-163.81"><tspan x="37.062" y="87.858" style="font-size: 27.1px; word-spacing: 0px; stroke-width: 1;">Epi</tspan><tspan style="fill: rgb(192, 57, 43); font-size: 27.1px; word-spacing: 0px; stroke-width: 1;">s</tspan><tspan style="font-size: 27.1px; word-spacing: 0px; stroke-width: 1;">odic</tspan></text>
+  <polyline style="fill: none; stroke: rgb(192, 58, 43); stroke-width: 3; stroke-linejoin: round;" points="73.072 107.976 73.072 123.82 85.094 123.82"/>
+  <polyline style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" points="34.296 108.45 34.296 40.877 62.664 40.877 62.664 24.484 114.634 24.484"/>
+  <polyline style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" points="145.824 54.532 114.576 54.532 114.576 48.956"/>
+  <path style="fill: none; stroke-width: 3; stroke-linejoin: round; stroke: rgb(192, 58, 43);" d="M 183.956 84.839 L 183.995 91.115 L 191.11 91.115"/>
+  <path style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" d="M 62.614 40.693 L 62.471 57.91 L 81.987 57.91 L 81.987 48.64 L 99.81 48.64 L 114.578 48.64 L 114.578 42.564 L 168.619 42.564"/>
+  <polyline style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" points="88.64 66.615 81.964 66.615 81.964 55.419"/>
+  <polyline style="fill: none; stroke-width: 3; stroke-linejoin: round; stroke: rgb(192, 58, 43);" points="170.124 102.878 145.764 102.878 145.764 92.194"/>
+  <polyline style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" points="141.446 138.84 98.135 138.84 98.135 126.657 136.026 126.657"/>
+  <polyline style="fill: none; stroke: rgb(47, 204, 113); stroke-width: 3; stroke-linejoin: round;" points="108.097 114.984 84.847 114.984 84.847 133.97 98.101 133.97"/>
+  <polyline style="stroke: rgb(192, 58, 43); fill: none; stroke-width: 3; stroke-linejoin: round;" points="125.816 28.303 114.51 28.303 114.51 16.201 135.791 16.201"/>
+  <polyline style="stroke-width: 3; stroke-linejoin: round; stroke: rgb(47, 204, 113); fill: none;" points="62.832 40.916 34.342 40.916 34.342 110.784 73.214 110.784"/>
+  <polyline style="stroke-width: 3; stroke-linejoin: round; stroke: rgb(47, 204, 113); fill: none;" points="73.095 112.396 73.095 94.186 145.522 94.186"/>
+  <path style="fill: none; stroke-width: 3; stroke-linejoin: round; stroke: rgb(192, 58, 43);" d="M 145.71 97.777 L 145.729 84.477 L 183.974 84.477 L 183.974 78.411 L 216.892 78.411"/>
+</svg>
