@@ -206,9 +206,23 @@ def rates(
         selected_columns = df.columns[~df.columns.isin(["Prior", "draw", "chain"])]
 
         for ax in axs.flatten():
-            ymax = df[selected_columns].max().max() + df[selected_columns].min().std()
-            ymin = df[selected_columns].min().min() - df[selected_columns].min().std()
-            ax.set_ylim(ymin, ymax)
+            values = df[selected_columns].to_numpy(dtype=float)
+            values = values[np.isfinite(values)]
+
+            if values.size == 0:
+                raise ValueError(
+                    f"No finite rate values available for plotting: {selected_columns}"
+                )
+
+            ymin = values.min()
+            ymax = values.max()
+
+            padding = (ymax - ymin) * 0.05
+
+            if padding == 0:
+                padding = max(abs(ymax) * 0.05, 1e-6)
+
+            ax.set_ylim(ymin - padding, ymax + padding)
 
         plt.savefig(f"{output_prefix}-{rug_str}-trimmed.svg")
 
