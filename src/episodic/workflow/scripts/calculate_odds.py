@@ -177,7 +177,7 @@ def calculate_odds(
                 "p_odds": p_odds,
                 "pos_p": pos_p,
                 "pos_odds": pos_odds,
-                "bf": log_diff,
+                "log_BF": log_diff,
             }
         )
 
